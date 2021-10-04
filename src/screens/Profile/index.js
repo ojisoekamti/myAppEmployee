@@ -17,7 +17,7 @@ const Profile = () => {
         <View style={{flexDirection: 'row', marginTop: 15}}>
           <Avatar.Image
             source={{
-              uri: "https://gravatar.com/avatar/fabe71b5c857bc6a5c63ecaaa695c08d",
+              uri: 'https://gravatar.com/avatar/fabe71b5c857bc6a5c63ecaaa695c08d',
             }}
             size={80}
           />
@@ -54,24 +54,6 @@ const Profile = () => {
         </View>
       </View>
 
-      <View style={styles.infoBoxWrapper}>
-        <View
-          style={[
-            styles.infoBox,
-            {
-              borderRightColor: '#dddddd',
-              borderRightWidth: 1,
-            },
-          ]}>
-          <Title>₹140.50</Title>
-          <Caption>Wallet</Caption>
-        </View>
-        <View style={styles.infoBox}>
-          <Title>12</Title>
-          <Caption>Orders</Caption>
-        </View>
-      </View>
-
       <View style={styles.menuWrapper}>
         <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
@@ -101,7 +83,7 @@ export default Profile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'#fff'
+    backgroundColor: '#fff',
   },
   userInfoSection: {
     paddingHorizontal: 30,
