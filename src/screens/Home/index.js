@@ -1,4 +1,11 @@
-import {Stack, Heading, HStack, Center, NativeBaseProvider} from 'native-base';
+import {
+  Stack,
+  Heading,
+  HStack,
+  Center,
+  NativeBaseProvider,
+  Badge,
+} from 'native-base';
 import React from 'react';
 import {
   View,
@@ -60,17 +67,32 @@ export function Example({navigation}) {
           </View>
           <Text style={styles.categoryBtnTxt}>Tukar Swift </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => navigation.navigate('Complaint')}>
           <View style={styles.categoryIcon}>
+            <Badge // bg="red.400"
+              colorScheme="danger"
+              rounded="999px"
+              mb={-4}
+              mr={-4}
+              zIndex={1}
+              variant="solid"
+              alignSelf="flex-end"
+              _text={{
+                fontSize: 12,
+              }}>
+              2
+            </Badge>
             <MaterialCommunityIcons
               name="account-alert"
               size={35}
               color="#d97706"
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>Complaints </Text>
+          <Text style={styles.categoryBtnTxt}>Complaints List </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
+        <TouchableOpacity style={styles.categoryBtn}>
           <View style={styles.categoryIcon}>
             <MaterialCommunityIcons name="virus" size={35} color="#d97706" />
           </View>
@@ -141,11 +163,11 @@ export function Example({navigation}) {
   );
 }
 
-const Home = () => {
+const Home = ({navigation}) => {
   return (
     <NativeBaseProvider>
       <AppBar />
-      <Example />
+      <Example navigation={navigation} />
     </NativeBaseProvider>
   );
 };
