@@ -50,19 +50,17 @@ export function Example({navigation}) {
       </View>
 
       <View style={styles.categoryContainer}>
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() =>{}
-          }>
+        <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
           <View style={styles.categoryIcon}>
-            <Ionicons name="cash" size={35} color="#d97706" />
+            <MaterialCommunityIcons
+              name="account-switch-outline"
+              size={35}
+              color="#d97706"
+            />
           </View>
-          <Text style={styles.categoryBtnTxt}>Bill Information</Text>
+          <Text style={styles.categoryBtnTxt}>Tukar Swift </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() =>{}
-          }>
+        <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
           <View style={styles.categoryIcon}>
             <MaterialCommunityIcons
               name="account-alert"
@@ -101,7 +99,8 @@ export function Example({navigation}) {
           <View style={styles.cardInfo}>
             <Text style={styles.cardTitle}>Lorem Ipsum</Text>
             <Text style={styles.cardDetails}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </Text>
           </View>
         </View>
@@ -116,7 +115,8 @@ export function Example({navigation}) {
           <View style={styles.cardInfo}>
             <Text style={styles.cardTitle}>Lorem Ipsum</Text>
             <Text style={styles.cardDetails}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </Text>
           </View>
         </View>
@@ -131,7 +131,8 @@ export function Example({navigation}) {
           <View style={styles.cardInfo}>
             <Text style={styles.cardTitle}>Lorem Ipsum</Text>
             <Text style={styles.cardDetails}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </Text>
           </View>
         </View>

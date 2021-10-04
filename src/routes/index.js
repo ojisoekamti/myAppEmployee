@@ -47,18 +47,6 @@ const MainApp = () => {
         }}
       />
       <Tab.Screen
-        name="Complaint"
-        component={Complaint}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({size, focused, color}) => {
-            return (
-              <Icon size="sm" as={<MaterialIcon name="assignment" />} color={color} />
-            );
-          },
-        }}
-      />
-      <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
