@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {Alert, StyleSheet} from 'react-native';
 import {
   NativeBaseProvider,
   Box,
@@ -13,6 +13,35 @@ import {
 } from 'native-base';
 
 const Login = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const proses = () => {
+    console.log(email);
+    console.log(password);
+    fetch('https://sb.thecityresort.com/api/user-login', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson.success) {
+          navigation.push('Otp', {
+            phone: responseJson.data.phone_number,
+          });
+        } else {
+          Alert.alert('Username / Password Salah');
+        }
+      });
+    //navigation.navigate('Otp');
+  };
   return (
     <NativeBaseProvider>
       <Box safeArea flex={1} p="2" py="8" w="90%" mx="auto">
@@ -33,7 +62,12 @@ const Login = ({navigation}) => {
               }}>
               Email ID
             </FormControl.Label>
-            <Input />
+            <Input
+              onChangeText={email => {
+                setEmail(email);
+              }}
+              value={email}
+            />
           </FormControl>
           <FormControl>
             <FormControl.Label
@@ -44,7 +78,13 @@ const Login = ({navigation}) => {
               }}>
               Password
             </FormControl.Label>
-            <Input type="password" />
+            <Input
+              type="password"
+              onChangeText={password => {
+                setPassword(password);
+              }}
+              value={password}
+            />
             <Link
               _text={{fontSize: 'xs', fontWeight: '500', color: 'amber.500'}}
               alignSelf="flex-end"
@@ -52,7 +92,11 @@ const Login = ({navigation}) => {
               Forget Password?
             </Link>
           </FormControl>
-          <Button mt="2" colorScheme="amber" _text={{color: 'white'}} onPress={() => navigation.navigate('Otp')}>
+          <Button
+            mt="2"
+            colorScheme="amber"
+            _text={{color: 'white'}}
+            onPress={() => proses()}>
             Sign in
           </Button>
         </VStack>
