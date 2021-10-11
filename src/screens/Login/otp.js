@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Alert} from 'react-native';
 import {
   NativeBaseProvider,
@@ -20,33 +20,52 @@ function generateOTP() {
   for (let i = 0; i < 6; i++) {
     OTP += digits[Math.floor(Math.random() * 10)];
   }
+
   return OTP;
 }
+
+var otpVar = generateOTP();
+console.log(otpVar);
 const Otp = ({route, navigation}) => {
   const {phone} = route.params;
-  console.log(phone);
-  console.log(generateOTP());
-  fetch(
-    'https://api.k1nguniverse.com/api/v1/send?api_key=veoWXwRgiYOcsXa&api_pass=6r8A2k0&module=SMS&sub_module=LONGNUMBER&sid=K1NGLONGOTP&destination=628111211457&content=Your OTP is 234565',
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    },
-  )
-    .then(response => response.json())
-    .then(responseJson => {
-      console.log(responseJson);
-      if (responseJson.success) {
-        navigation.push('Otp', {
-          phone: responseJson.data.phone_number,
-        });
+  const [kodeOtp, setkodeOtp] = useState('');
+  const proses = kodeOtp => {
+    if (kodeOtp.length > 5) {
+      if (kodeOtp != otpVar) {
+        Alert.alert('Kode Otp Salah');
       } else {
-        Alert.alert('Username / Password Salah');
+        navigation.navigate('MainApp');
       }
-    });
+    }
+  };
+
+  useEffect(() => {
+    const {phone} = route.params;
+    console.log(phone);
+    return;
+    fetch(
+      'https://api.k1nguniverse.com/api/v1/send?api_key=veoWXwRgiYOcsXa&api_pass=6rL8A2k0&module=SMS&sub_module=LONGNUMBER&sid=K1NGLONGOTP&destination=' +
+        phone +
+        '&content=Your OTP is' +
+        otpVar,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson);
+        if (responseJson.success) {
+          navigation.push('Otp', {
+            phone: responseJson.data.phone_number,
+          });
+        }
+      });
+  }, []);
   return (
     <NativeBaseProvider>
       <Box safeArea flex={1} p="2" py="8" w="90%" mx="auto">
@@ -67,15 +86,22 @@ const Otp = ({route, navigation}) => {
               }}>
               Input Otp
             </FormControl.Label>
-            <Input />
+            <Input
+              onChangeText={kodeOtp => {
+                setkodeOtp(kodeOtp);
+                proses(kodeOtp);
+              }}
+              keyboardType="number-pad"
+              value={kodeOtp}
+            />
           </FormControl>
-          <Button
+          {/* <Button
             mt="2"
             colorScheme="amber"
             _text={{color: 'white'}}
             onPress={() => navigation.navigate('MainApp')}>
             Submit
-          </Button>
+          </Button> */}
         </VStack>
       </Box>
     </NativeBaseProvider>

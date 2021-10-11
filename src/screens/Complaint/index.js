@@ -13,22 +13,11 @@ const Complaint = ({navigation}) => {
     <View style={{backgroundColor: '#fff', flex: 1, alignItems: 'center'}}>
       <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ComplaintDetail')}>
         <View style={styles.cardInfo}>
-          <Text style={styles.cardTitle}>Barang Mencurigakan</Text>
+          <Text style={styles.cardTitle}>{{}}</Text>
           <Text style={styles.cardDetails}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          
           </Text>
-          <Text style={styles.cardDetails}>2021-08-20 12:34:00</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.card}>
-        <View style={styles.cardInfo}>
-          <Text style={styles.cardTitle}>Lorem Ipsum</Text>
-          <Text style={styles.cardDetails}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </Text>
-          <Text style={styles.cardDetails}>2021-08-20 12:34:00</Text>
+          <Text style={styles.cardDetails}>{{}}</Text>
         </View>
       </TouchableOpacity>
     </View>
