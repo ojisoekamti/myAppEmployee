@@ -11,27 +11,6 @@ import {
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-useEffect(() => {
-  const {phone} = route.params;
-  console.log(phone);
-  return;
-  fetch('https://sb.thecityresort.com/api/user-login', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(response => response.json())
-    .then(responseJson => {
-      console.log(responseJson);
-      if (responseJson.success) {
-        navigation.push('Otp', {
-          phone: responseJson.data.phone_number,
-        });
-      }
-    });
-}, []);
 const ComplaintDetail = () => {
   return (
     <>
@@ -44,12 +23,15 @@ const ComplaintDetail = () => {
         }}>
         <Box>
           <Heading size="lg" style={{}}>
-            {{}}
+            Barang Mencurigakan
           </Heading>
           <Divider my="2" />
         </Box>
-        <Text style={{padding: 5, fontWeight: 'bold'}}>{{}}</Text>
-        <Text>{{}}</Text>
+        <Text style={{padding: 5, fontWeight: 'bold'}}>Keterangan</Text>
+        <Text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </Text>
         <Divider my="2" />
         <Text style={{padding: 5, fontWeight: 'bold'}}>Realisasi</Text>
         <TextArea placeholder="Text Area Placeholder" />
