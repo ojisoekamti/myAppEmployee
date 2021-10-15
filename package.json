@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.9",
+    "@react-native-firebase/app": "^12.9.1",
     "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-navigation/bottom-tabs": "^6.0.7",
     "@react-navigation/native": "^6.0.4",
@@ -19,8 +20,9 @@
     "firebase": "^9.1.2",
     "native-base": "^3.2.0",
     "react": "17.0.2",
-    "react-native": "^0.66.0",
+    "react-native": "^0.61.4",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-gifted-chat": "^0.16.3",
     "react-native-paper": "^4.9.2",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.8.0",

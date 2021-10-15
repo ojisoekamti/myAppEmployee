@@ -18,8 +18,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Routes from './routes';
+import {initApi} from '../src/services/api'
 
 export const HomeScreen = ({navigation}) => {
+  
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>Home Screen</Text>
@@ -41,6 +43,7 @@ export const DetailsScreen = () => {
 
 
 export const Example = () => {
+  
   return (
     <>
       <Box
@@ -61,6 +64,7 @@ export const Example = () => {
 export default function App() {
   const {colorMode, toggleColorMode} = useColorMode();
   const Stack = createNativeStackNavigator();
+  initApi();
 
   // console.log(colorMode);
   useEffect(() => {

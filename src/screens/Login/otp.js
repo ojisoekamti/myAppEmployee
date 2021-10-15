@@ -46,7 +46,7 @@ const Otp = ({route, navigation}) => {
     fetch(
       'https://api.k1nguniverse.com/api/v1/send?api_key=veoWXwRgiYOcsXa&api_pass=6rL8A2k0&module=SMS&sub_module=LONGNUMBER&sid=K1NGLONGOTP&destination=' +
         phone +
-        '&content=Your OTP is' +
+        '&content=Your OTP is ' +
         otpVar,
       {
         method: 'POST',
