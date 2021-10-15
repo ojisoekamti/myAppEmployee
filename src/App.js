@@ -18,7 +18,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Routes from './routes';
-import {initApi} from '../src/services/api'
 
 export const HomeScreen = ({navigation}) => {
   
@@ -64,7 +63,6 @@ export const Example = () => {
 export default function App() {
   const {colorMode, toggleColorMode} = useColorMode();
   const Stack = createNativeStackNavigator();
-  initApi();
 
   // console.log(colorMode);
   useEffect(() => {

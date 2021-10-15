@@ -1,14 +1,7 @@
 //Firebase Configuration
 import firebase from 'firebase/app';
+import auth from '@react-native-firebase/auth';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyCZVcNhnuACkx6VA82bzOeuqwoaF68JCKo',
-  databaseURL: 'https://thecityresort-app-default-rtdb.firebaseio.com/',
-  projectID: 'thecityresort-app',
-  appId: '1:873602037019:android:2acdd731e178c305708fbe',
-};
-
-const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 class config {
   constructor() {
@@ -29,13 +22,15 @@ class config {
       });
     }
   };
+  
   checkAuth = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    auth().onAuthStateChanged(user => {
       if (!user) {
-        firebase.auth().signInAnonymously();
+        auth().signInAnonymously();
       }
     });
   };
+
   send = (message = message.forEach(item => {
     const message = {
       text: item.text,
@@ -43,6 +38,7 @@ class config {
       user: item.user,
     };
   }));
+
   parse = message => {
     const {user, text, tmiestamp} = message.val();
     const {key: _id} = message;
@@ -54,6 +50,7 @@ class config {
       user,
     };
   };
+
   get = callback => {
     this.db.on('child_added', snapshot => callback(this.parse(snapshot)));
   };
