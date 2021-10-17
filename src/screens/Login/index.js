@@ -11,8 +11,6 @@ import {
   Link,
   Button,
 } from 'native-base';
-import {setAsyncData} from '../../asyncStorage/main';
-import { uid } from '../../utils/constants/const';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -35,8 +33,6 @@ const Login = ({navigation}) => {
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson.success) {
-          setAsyncData(responseJson.data.phone_number,uid);
-          console.log(getAsyncData('uid'))
           navigation.push('Otp', {
             phone: responseJson.data.phone_number,
           });

@@ -19,7 +19,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
 
-export default function Chat() {
+export default function Chat({navigation}) {
   const [mode, setMode] = useState('Basic');
 
   return (
@@ -28,13 +28,13 @@ export default function Chat() {
         <Heading p="4" pb="3" size="lg">
           Inbox
         </Heading>
-        <Basic />
+        <Basic navigation={navigation}/>
       </Box>
     </NativeBaseProvider>
   );
 }
 
-function Basic() {
+function Basic({navigation}) {
   const data = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -68,7 +68,7 @@ function Basic() {
 
   const renderItem = ({ item, index }) => (
     <Box>
-      <Pressable onPress={() => console.log('You touched me')} bg="white">
+      <Pressable onPress={() => navigation.navigate("ChatScreen")} bg="white">
         <Box
           pl="4"
           pr="5"

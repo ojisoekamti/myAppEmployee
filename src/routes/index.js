@@ -13,6 +13,7 @@ import Login from '../screens/Login';
 import Complaint from '../screens/Complaint';
 import otp from '../screens/Login/otp';
 import ComplaintDetail from '../screens/Complaint/ComplaintDetail';
+import ChatScreen from '../screens/Chat/ChatScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -72,7 +73,7 @@ const MainApp = () => {
 };
 const Routes = () => {
   return (
-    <Stack.Navigator initialRouteName="Splash">
+    <Stack.Navigator initialRouteName="ChatScreen">
       <Stack.Screen
         name="MainApp"
         component={MainApp}
@@ -86,6 +87,11 @@ const Routes = () => {
       <Stack.Screen
         name="Login"
         component={Login}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen name="Otp" component={otp} options={{headerShown: false}} />
