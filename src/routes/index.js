@@ -73,7 +73,7 @@ const MainApp = () => {
 };
 const Routes = () => {
   return (
-    <Stack.Navigator initialRouteName="ChatScreen">
+    <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen
         name="MainApp"
         component={MainApp}
@@ -89,11 +89,7 @@ const Routes = () => {
         component={Login}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="ChatScreen"
-        component={ChatScreen}
-        options={{headerShown: false}}
-      />
+      <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="Otp" component={otp} options={{headerShown: false}} />
       <Stack.Screen name="Complaint" component={Complaint} />
       <Stack.Screen name="ComplaintDetail" component={ComplaintDetail} />

@@ -68,7 +68,7 @@ function Basic({navigation}) {
 
   const renderItem = ({ item, index }) => (
     <Box>
-      <Pressable onPress={() => navigation.navigate("ChatScreen")} bg="white">
+      <Pressable onPress={() => navigation.navigate("ChatScreen",{ name: 'abdulghoji' })} bg="white">
         <Box
           pl="4"
           pr="5"

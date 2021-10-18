@@ -1,55 +1,51 @@
-import React, {Component} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Platform,
-  KeyboardAvoidingView,
-  SafeAreaView,
-} from 'react-native';
+import React, {useState, useCallback, useEffect} from 'react';
 import {GiftedChat} from 'react-native-gifted-chat';
-import Fire from '../../utils/config/firebase';
+import {firebaseInit, pushData} from '../../services/firebase';
+import * as firebaseData from 'firebase';
 
-export default class ChatScreen extends Component {
-  state = {
-    message: [],
-  };
+export default function Example() {
+  const [messages, setMessages] = useState([]);
 
-  get user() {
-    return {
-      _id: Fire.uid,
-      name: 'Abdul Ghoji',
-    };
-  }
-
-  componentDidMount() {
-    Fire.get(message =>
-      this.setState(previous => ({
-        message: GiftedChat.append(previous.message, message),
-      })),
+  useEffect(() => {
+    firebaseInit;
+    firebaseData
+      .database()
+      .ref('messages')
+      .orderByChild('original')
+      .on('value', function (snap) {
+        let dataArray = [];
+        var i = 0;
+        snap.forEach(childSnapshot => {
+          dataArray.push(childSnapshot.val());
+          i++;
+        });
+        var results = [];
+        for (var i = dataArray.length - 1; -1 < i; i--) {
+          results.push(dataArray[i]);
+        }
+        setMessages(results);
+      });
+  }, []);
+  const onSend = useCallback((messages = []) => {
+    setMessages(previousMessages =>
+      GiftedChat.append(previousMessages, messages),
     );
-  }
-  componentWillUnmount() {
-    Fire.off();
-  }
-  render() {
-    const chat = (
-      <GiftedChat
-        messages={this.state.message}
-        onSend={Fire.send}
-        user={this.user}
-      />
-    );
-    if (Platform.OS === 'android') {
-      return (
-        <KeyboardAvoidingView
-          style={{flex: 1}}
-          behavior="padding"
-          keyboardVerticalOffset={3}>
-          {chat}
-        </KeyboardAvoidingView>
-      );
-    }
-    return <SafeAreaView style={{flex: 1}}>{chat}</SafeAreaView>;
-  }
+    messages[0].createdAt = new Date().getTime();
+    pushData('messages', messages[0]);
+    console.log(messages[0]);
+  }, []);
+
+  return (
+    <GiftedChat
+      messages={messages}
+      onSend={messages => onSend(messages)}
+      createdAt={new Date()}
+      renderUsernameOnMessage={true}
+      user={{
+        _id: 3,
+        avatar: 'https://placeimg.com/140/140/any',
+        name: 'Raymnod',
+      }}
+    />
+  );
 }

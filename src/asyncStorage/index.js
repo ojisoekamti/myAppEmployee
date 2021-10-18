@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const key = {
-  uid: 'uid',
+  uuid: 'uid',
 };
 
 export const setAsyncData = async (key, item) => {
