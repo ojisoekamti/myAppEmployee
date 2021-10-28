@@ -1,16 +1,28 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {GiftedChat,ActionsProps} from 'react-native-gifted-chat';
 import {firebaseInit, pushData} from '../../services/firebase';
 import * as firebaseData from 'firebase';
+import {getAsyncData} from '../../asyncStorage';
 
-export default function Example() {
+
+
+export default function Example({route}) {
   const [messages, setMessages] = useState([]);
-
+  const [userId, setUserId] = useState('');
+  const [userName, setUserName] = useState('');
   useEffect(() => {
     firebaseInit;
+
+    const getUserData = async () => {
+      const uid = await getAsyncData('uuid');
+      const uname = await getAsyncData('uname');
+      setUserId(uid);
+      setUserName(uname);
+    };
+    getUserData();
     firebaseData
       .database()
-      .ref('messages')
+      .ref(route.params.prefix)
       .orderByChild('original')
       .on('value', function (snap) {
         let dataArray = [];
@@ -31,8 +43,7 @@ export default function Example() {
       GiftedChat.append(previousMessages, messages),
     );
     messages[0].createdAt = new Date().getTime();
-    pushData('messages', messages[0]);
-    console.log(messages[0]);
+    pushData(route.params.prefix, messages[0]);
   }, []);
 
   return (
@@ -41,10 +52,11 @@ export default function Example() {
       onSend={messages => onSend(messages)}
       createdAt={new Date()}
       renderUsernameOnMessage={true}
+      // renderActions={renderActions}
       user={{
-        _id: 3,
+        _id: userId,
         avatar: 'https://placeimg.com/140/140/any',
-        name: 'Raymnod',
+        name: userName ? JSON.parse(userName) : null,
       }}
     />
   );

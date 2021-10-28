@@ -11,12 +11,14 @@ import {
   Link,
   Button,
 } from 'native-base';
+import {setAsyncData, deleteAsyncData} from '../../asyncStorage';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const proses = () => {
+    deleteAsyncData();
     console.log(email);
     console.log(password);
     fetch('https://sb.thecityresort.com/api/user-login', {
@@ -33,6 +35,12 @@ const Login = ({navigation}) => {
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson.success) {
+          console.log(responseJson.data);
+          setAsyncData('uuid', responseJson.data.id);
+          setAsyncData('uname', responseJson.data.name);
+          setAsyncData('uemail', responseJson.data.email);
+          setAsyncData('uphone', responseJson.data.phone_number);
+          setAsyncData('uavatar', responseJson.data.avatar);
           navigation.push('Otp', {
             phone: responseJson.data.phone_number,
           });

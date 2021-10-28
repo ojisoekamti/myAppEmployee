@@ -6,7 +6,7 @@ export const key = {
 
 export const setAsyncData = async (key, item) => {
   try {
-    await AsyncStorage.setItem(key, item);
+    await AsyncStorage.setItem(key, JSON.stringify(item));
   } catch (error) {
     console.log(error);
   }
