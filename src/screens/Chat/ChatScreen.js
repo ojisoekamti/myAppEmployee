@@ -1,23 +1,24 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {GiftedChat,ActionsProps} from 'react-native-gifted-chat';
+import {GiftedChat, ActionsProps} from 'react-native-gifted-chat';
 import {firebaseInit, pushData} from '../../services/firebase';
 import * as firebaseData from 'firebase';
 import {getAsyncData} from '../../asyncStorage';
-
-
 
 export default function Example({route}) {
   const [messages, setMessages] = useState([]);
   const [userId, setUserId] = useState('');
   const [userName, setUserName] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
   useEffect(() => {
     firebaseInit;
 
     const getUserData = async () => {
       const uid = await getAsyncData('uuid');
       const uname = await getAsyncData('uname');
+      const uavatar = await getAsyncData('uavatar');
       setUserId(uid);
       setUserName(uname);
+      setUserAvatar(uavatar);
     };
     getUserData();
     firebaseData
@@ -43,6 +44,9 @@ export default function Example({route}) {
       GiftedChat.append(previousMessages, messages),
     );
     messages[0].createdAt = new Date().getTime();
+    messages[0].sent = true;
+    messages[0].received = true;
+    console.log(messages);
     pushData(route.params.prefix, messages[0]);
   }, []);
 
@@ -55,7 +59,9 @@ export default function Example({route}) {
       // renderActions={renderActions}
       user={{
         _id: userId,
-        avatar: 'https://placeimg.com/140/140/any',
+        avatar:
+          'https://sb.thecityresort.com/storage/' +
+          (userAvatar ? JSON.parse(userAvatar) : null),
         name: userName ? JSON.parse(userName) : null,
       }}
     />

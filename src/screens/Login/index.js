@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Alert, StyleSheet, BackHandler} from 'react-native';
 import {
   NativeBaseProvider,
   Box,
@@ -10,15 +10,44 @@ import {
   Input,
   Link,
   Button,
+  Icon,
 } from 'native-base';
 import {setAsyncData, deleteAsyncData} from '../../asyncStorage';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
-  const proses = () => {
+  const [show, setShow] = React.useState(false);
+  useEffect(() => {
     deleteAsyncData();
+    const backAction = () => {
+      Alert.alert('Hold on!', 'Are you sure you want to exit ?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'YES',
+          onPress: () => {
+            deleteAsyncData();
+            BackHandler.exitApp();
+          },
+        },
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+  const proses = () => {
     console.log(email);
     console.log(password);
     fetch('https://sb.thecityresort.com/api/user-login', {
@@ -50,6 +79,8 @@ const Login = ({navigation}) => {
       });
     //navigation.navigate('Otp');
   };
+
+  const handleClick = () => setShow(!show);
   return (
     <NativeBaseProvider>
       <Box safeArea flex={1} p="2" py="8" w="90%" mx="auto">
@@ -87,11 +118,25 @@ const Login = ({navigation}) => {
               Password
             </FormControl.Label>
             <Input
-              type="password"
+              type={show ? 'text' : 'password'}
               onChangeText={password => {
                 setPassword(password);
               }}
               value={password}
+              InputRightElement={
+                <Icon
+                  as={
+                    <MaterialIcons
+                      name={show ? 'visibility-off' : 'visibility'}
+                    />
+                  }
+                  size={5}
+                  mr="2"
+                  color="muted.400"
+                  onPress={handleClick}
+                />
+              }
+              placeholder="Password"
             />
             <Link
               _text={{fontSize: 'xs', fontWeight: '500', color: 'amber.500'}}

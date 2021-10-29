@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Alert} from 'react-native';
+import React, {useEffect, useState, Component} from 'react';
+import {StyleSheet, Alert, BackHandler, TouchableOpacity} from 'react-native';
 import {
   NativeBaseProvider,
   Box,
@@ -12,7 +12,7 @@ import {
   Button,
 } from 'native-base';
 
-import {getAsyncData} from '../../asyncStorage';
+import {getAsyncData, deleteAsyncData, setAsyncData} from '../../asyncStorage';
 
 function generateOTP() {
   // Declare a digits variable
@@ -31,27 +31,88 @@ console.log(otpVar);
 const Otp = ({route, navigation}) => {
   const {phone} = route.params;
   const [kodeOtp, setkodeOtp] = useState('');
+  const [seconds, setSeconds] = React.useState(60);
+  const [userId, setUserId] = useState('');
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPhone, setUserPhone] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
   const proses = kodeOtp => {
     if (kodeOtp.length > 5) {
       if (kodeOtp != otpVar) {
         Alert.alert('Kode Otp Salah');
       } else {
+        setAsyncData('uuid', userId);
+        setAsyncData('uname', userName);
+        setAsyncData('uemail', userEmail);
+        setAsyncData('uphone', userPhone);
+        setAsyncData('uavatar', userAvatar);
         navigation.navigate('MainApp');
       }
     }
   };
+  const timerFunc = () => {
+    if (seconds > 0) {
+      setTimeout(() => setSeconds(seconds - 1), 1000);
+    } else {
+      setSeconds(0);
+    }
+  };
+  React.useEffect(() => {
+    timerFunc();
+  });
 
+  const getUserData = async () => {
+    const uid = await getAsyncData('uuid');
+    const uname = await getAsyncData('uname');
+    const uemail = await getAsyncData('uemail');
+    const uphone = await getAsyncData('uphone');
+    const uavatar = await getAsyncData('uavatar');
+    console.log('uid', uid);
+    console.log('name', uname);
+    if (uid != null) {
+      setUserId(uid);
+      setUserName(uname.replace(/['"]+/g, ''));
+      setUserEmail(uemail.replace(/['"]+/g, ''));
+      setUserPhone(uphone.replace(/['"]+/g, ''));
+      setUserAvatar(uavatar.replace(/['"]+/g, ''));
+      deleteAsyncData();
+    }
+  };
   useEffect(() => {
     const {phone} = route.params;
     console.log(phone);
     console.log(otpVar);
 
-    const getUserData = async () => {
-      const userData = await getAsyncData('uuid');
-      console.log(userData);
-    };
     getUserData();
+    const backAction = () => {
+      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'YES',
+          onPress: () => {
+            deleteAsyncData();
+            BackHandler.exitApp();
+          },
+        },
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    backHandler.remove();
+    sendOtp();
     // return;
+  }, []);
+
+  const sendOtp = () => {
     var formdata = new FormData();
     formdata.append('phone_number', phone);
     formdata.append('otp', otpVar);
@@ -64,9 +125,12 @@ const Otp = ({route, navigation}) => {
 
     fetch('https://sb.thecityresort.com/api/user-otp', requestOptions)
       .then(response => response.text())
-      .then(result => console.log(result))
+      .then(result => {
+        console.log(result);
+      })
       .catch(error => console.log('error', error));
-  }, []);
+  };
+
   return (
     <NativeBaseProvider>
       <Box safeArea flex={1} p="2" py="8" w="90%" mx="auto">
@@ -95,6 +159,35 @@ const Otp = ({route, navigation}) => {
               keyboardType="number-pad"
               value={kodeOtp}
             />
+
+            {seconds > 0 ? (
+              <Text
+                _text={{
+                  fontSize: 'xs',
+                  fontWeight: '500',
+                  color: 'amber.500',
+                }}
+                disable={true}
+                alignSelf="flex-end"
+                mt="1">
+                Resend Otp in {seconds}
+              </Text>
+            ) : (
+              <Link
+                _text={{
+                  fontSize: 'xs',
+                  fontWeight: '500',
+                  color: 'amber.500',
+                }}
+                alignSelf="flex-end"
+                onPress={() => {
+                  sendOtp();
+                  setSeconds(60);
+                }}
+                mt="1">
+                Resend Otp ?
+              </Link>
+            )}
           </FormControl>
           {/* <Button
             mt="2"

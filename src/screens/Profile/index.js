@@ -77,7 +77,8 @@ const Profile = ({navigation}) => {
             <Text style={styles.menuItemText}>Tell Your Friends</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple
+          onPress={() => navigation.navigate('EditProfileScreen')}>
           <View style={styles.menuItem}>
             <Icon name="account-check-outline" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Edit Profile</Text>

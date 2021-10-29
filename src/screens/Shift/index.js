@@ -101,7 +101,7 @@ const TukarShift = () => {
             <Center
               height={10}
               width={300}
-              bg={disabled ? 'warning.500' : 'succeess.500'}
+              bg={disabled ? 'warning.500' : 'success.500'}
               rounded="sm"
               _text={{
                 color: 'warmGray.50',

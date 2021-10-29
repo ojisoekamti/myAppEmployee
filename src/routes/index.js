@@ -15,12 +15,14 @@ import otp from '../screens/Login/otp';
 import ComplaintDetail from '../screens/Complaint/ComplaintDetail';
 import ChatScreen from '../screens/Chat/ChatScreen';
 import TukarShift from '../screens/Shift';
+import EditProfileScreen from '../screens/Profile/EditProfileScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const MainApp = () => {
   return (
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={({route}) => ({
         tabBarActiveTintColor: '#f59e0b',
         tabBarInactiveTintColor: '#a8a29e',
@@ -98,6 +100,11 @@ const Routes = () => {
         name="TukarShift"
         component={TukarShift}
         options={{title: 'Tukar Shift'}}
+      />
+      <Stack.Screen
+        name="EditProfileScreen"
+        component={EditProfileScreen}
+        options={{title: 'Edit Profile'}}
       />
     </Stack.Navigator>
   );
