@@ -11,7 +11,8 @@ import {Heading, Stack, Center, VStack, ImageButton} from 'native-base';
 const Complaint = ({navigation}) => {
   return (
     <View style={{backgroundColor: '#fff', flex: 1, alignItems: 'center'}}>
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ComplaintDetail')}>
+    <Text>No Data Available</Text>
+      {/* <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ComplaintDetail')}>
         <View style={styles.cardInfo}>
           <Text style={styles.cardTitle}>Barang Mencurigakan</Text>
           <Text style={styles.cardDetails}>
@@ -20,8 +21,8 @@ const Complaint = ({navigation}) => {
           </Text>
           <Text style={styles.cardDetails}>2021-08-20 12:34:00</Text>
         </View>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.card}>
+      </TouchableOpacity> */}
+      {/* <TouchableOpacity style={styles.card}>
         <View style={styles.cardInfo}>
           <Text style={styles.cardTitle}>Lorem Ipsum</Text>
           <Text style={styles.cardDetails}>
@@ -30,7 +31,7 @@ const Complaint = ({navigation}) => {
           </Text>
           <Text style={styles.cardDetails}>2021-08-20 12:34:00</Text>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

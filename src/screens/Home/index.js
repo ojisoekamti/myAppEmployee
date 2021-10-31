@@ -34,21 +34,21 @@ export function Example({navigation}) {
           activeDotColor="#d97706">
           <View style={styles.slide}>
             <Image
-              source={require('../../assets/images/food-banner1.jpg')}
+              source={require('../../assets/images/city-resort.jpeg')}
               resizeMode="cover"
               style={styles.sliderImage}
             />
           </View>
           <View style={styles.slide}>
             <Image
-              source={require('../../assets/images/food-banner2.jpg')}
+              source={require('../../assets/images/city-resort-poll.jpeg')}
               resizeMode="cover"
               style={styles.sliderImage}
             />
           </View>
           <View style={styles.slide}>
             <Image
-              source={require('../../assets/images/food-banner3.jpg')}
+              source={require('../../assets/images/city-sky.jpeg')}
               resizeMode="cover"
               style={styles.sliderImage}
             />
@@ -73,7 +73,7 @@ export function Example({navigation}) {
           style={styles.categoryBtn}
           onPress={() => navigation.navigate('Complaint')}>
           <View style={styles.categoryIcon}>
-            <Badge // bg="red.400"
+            {/* <Badge // bg="red.400"
               colorScheme="danger"
               rounded="999px"
               mb={-4}
@@ -85,7 +85,7 @@ export function Example({navigation}) {
                 fontSize: 12,
               }}>
               2
-            </Badge>
+            </Badge> */}
             <MaterialCommunityIcons
               name="account-alert"
               size={35}

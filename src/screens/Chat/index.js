@@ -37,6 +37,7 @@ export default function Chat({navigation}) {
 function Basic({navigation}) {
   const [userId, setUserId] = useState('');
   const [userName, setUserName] = useState('');
+  const [userRole, setUserRole] = useState('');
   const [listData, setListData] = useState();
   let data = [];
 
@@ -44,10 +45,15 @@ function Basic({navigation}) {
     const getUserData = async () => {
       const uid = await getAsyncData('uuid');
       const uname = await getAsyncData('uname');
+      const urole = await getAsyncData('urole');
       setUserId(uid);
       setUserName(uname);
-      console.log(uid);
-      var url = 'https://sb.thecityresort.com/api/user-role?uid=' + uid;
+      setUserRole(urole);
+      var url =
+        'https://sb.thecityresort.com/api/user-role?uid=' +
+        uid +
+        '&role=' +
+        urole;
       console.log(url);
       var formdata = new FormData();
 
@@ -123,11 +129,41 @@ function Basic({navigation}) {
                 'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
             });
           }
-          setListData(data)
+          setListData(data);
           console.log(data);
         })
         .catch(error => console.log('error', error));
 
+      console.log('twtest', uid);
+      const url2 =
+        'https://sb.thecityresort.com/api/user-role-additional?uid=' +
+        JSON.parse(userId);
+      fetch(url2, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          result = JSON.parse(result);
+          console.log('Tset', result.length);
+          let nameGroup = 'Group 1';
+          for (var i = 0; i < result.length; i++) {
+            if (result[i].role_id == 16) {
+              nameGroup = 'Group 2';
+            } else if (result[i].role_id == 17) {
+              nameGroup = 'Group 3';
+            }
+            data.push({
+              id: 'bd7acbeb-c1b1-46c2-aed5-' + result[i].role_id,
+              fullName: nameGroup,
+              prefix: 'security-crr' + result[i].role_id,
+              timeStamp: '12:47 PM',
+              // recentText: 'Good Day!',
+              avatarUrl:
+                'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
+            });
+          }
+          // setListData(data);
+          // console.log(data);
+        })
+        .catch(error => console.log('error', error));
     };
     getUserData();
   }, []);

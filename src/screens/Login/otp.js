@@ -37,16 +37,18 @@ const Otp = ({route, navigation}) => {
   const [userEmail, setUserEmail] = useState('');
   const [userPhone, setUserPhone] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
+  const [userRole, setUserRole] = useState('');
   const proses = kodeOtp => {
     if (kodeOtp.length > 5) {
       if (kodeOtp != otpVar) {
         Alert.alert('Kode Otp Salah');
       } else {
-        setAsyncData('uuid', userId);
+        setAsyncData('uuid', JSON.parse(userId));
         setAsyncData('uname', userName);
         setAsyncData('uemail', userEmail);
         setAsyncData('uphone', userPhone);
         setAsyncData('uavatar', userAvatar);
+        setAsyncData('urole', userRole);
         navigation.navigate('MainApp');
       }
     }
@@ -68,6 +70,7 @@ const Otp = ({route, navigation}) => {
     const uemail = await getAsyncData('uemail');
     const uphone = await getAsyncData('uphone');
     const uavatar = await getAsyncData('uavatar');
+    const urole = await getAsyncData('urole');
     console.log('uid', uid);
     console.log('name', uname);
     if (uid != null) {
@@ -76,9 +79,11 @@ const Otp = ({route, navigation}) => {
       setUserEmail(uemail.replace(/['"]+/g, ''));
       setUserPhone(uphone.replace(/['"]+/g, ''));
       setUserAvatar(uavatar.replace(/['"]+/g, ''));
+      setUserRole(urole.replace(/['"]+/g, ''));
       deleteAsyncData();
     }
   };
+
   useEffect(() => {
     const {phone} = route.params;
     console.log(phone);

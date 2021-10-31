@@ -70,6 +70,7 @@ const Login = ({navigation}) => {
           setAsyncData('uemail', responseJson.data.email);
           setAsyncData('uphone', responseJson.data.phone_number);
           setAsyncData('uavatar', responseJson.data.avatar);
+          setAsyncData('urole', responseJson.data.role_id);
           navigation.push('Otp', {
             phone: responseJson.data.phone_number,
           });
