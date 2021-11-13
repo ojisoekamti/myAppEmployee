@@ -27,7 +27,7 @@ function generateOTP() {
 }
 
 var otpVar = generateOTP();
-console.log(otpVar);
+// console.log(otpVar);
 const Otp = ({route, navigation}) => {
   const {phone} = route.params;
   const [kodeOtp, setkodeOtp] = useState('');
@@ -118,6 +118,13 @@ const Otp = ({route, navigation}) => {
   }, []);
 
   const sendOtp = () => {
+    var digits = '0123456789';
+    let OTP = '';
+    for (let i = 0; i < 6; i++) {
+      OTP += digits[Math.floor(Math.random() * 10)];
+    }
+    otpVar = OTP;
+    console.log(otpVar);
     var formdata = new FormData();
     formdata.append('phone_number', phone);
     formdata.append('otp', otpVar);

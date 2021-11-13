@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Alert, StyleSheet, BackHandler} from 'react-native';
+import {Alert, StyleSheet, BackHandler, ActivityIndicator} from 'react-native';
 import {
   NativeBaseProvider,
   Box,
@@ -11,6 +11,7 @@ import {
   Link,
   Button,
   Icon,
+  View,
 } from 'native-base';
 import {setAsyncData, deleteAsyncData} from '../../asyncStorage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -20,6 +21,7 @@ const Login = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [show, setShow] = React.useState(false);
+  const [isLoading, setIsLoading] = useState('');
   useEffect(() => {
     deleteAsyncData();
     const backAction = () => {
@@ -50,6 +52,7 @@ const Login = ({navigation}) => {
   const proses = () => {
     console.log(email);
     console.log(password);
+    setIsLoading(true);
     fetch('https://sb.thecityresort.com/api/user-login', {
       method: 'POST',
       headers: {
@@ -71,11 +74,13 @@ const Login = ({navigation}) => {
           setAsyncData('uphone', responseJson.data.phone_number);
           setAsyncData('uavatar', responseJson.data.avatar);
           setAsyncData('urole', responseJson.data.role_id);
+          setIsLoading(false);
           navigation.push('Otp', {
             phone: responseJson.data.phone_number,
           });
         } else {
           Alert.alert('Username / Password Salah');
+          setIsLoading(false);
         }
       });
     //navigation.navigate('Otp');
@@ -155,6 +160,32 @@ const Login = ({navigation}) => {
           </Button>
         </VStack>
       </Box>
+      {isLoading ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            padding: 10,
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#e4ff0000',
+          }}>
+          {isLoading ? (
+            <ActivityIndicator color={'#fbbf24'} size="large" />
+          ) : (
+            <View></View>
+          )}
+        </View>
+      ) : (
+        <></>
+      )}
     </NativeBaseProvider>
   );
 };

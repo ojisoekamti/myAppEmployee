@@ -39,9 +39,11 @@ function Basic({navigation}) {
   const [userName, setUserName] = useState('');
   const [userRole, setUserRole] = useState('');
   const [listData, setListData] = useState();
+  const [isLoading, setIsLoading] = useState('');
   let data = [];
 
-  useEffect(() => {
+  React.useEffect(() => {
+    setIsLoading(true);
     const getUserData = async () => {
       const uid = await getAsyncData('uuid');
       const uname = await getAsyncData('uname');
@@ -61,6 +63,35 @@ function Basic({navigation}) {
         method: 'GET',
         redirect: 'follow',
       };
+
+      const url2 =
+        'https://sb.thecityresort.com/api/user-role-additional?uid=' + uid;
+      fetch(url2, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          result = JSON.parse(result);
+          console.log('Tset', result.length);
+          let nameGroup = 'Group 1';
+          for (var i = 0; i < result.length; i++) {
+            if (result[i].role_id == 16) {
+              nameGroup = 'Group 2';
+            } else if (result[i].role_id == 17) {
+              nameGroup = 'Group 3';
+            }
+            data.push({
+              id: 'bd7acbeb-c1b1-46c2-aed5-' + result[i].role_id,
+              fullName: nameGroup,
+              prefix: 'security-crr' + result[i].role_id,
+              timeStamp: '12:47 PM',
+              // recentText: 'Good Day!',
+              avatarUrl:
+                'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
+            });
+          }
+          // setListData(data);
+          // console.log(data);
+        })
+        .catch(error => console.log('error', error));
 
       fetch(url, requestOptions)
         .then(response => response.text())
@@ -135,37 +166,10 @@ function Basic({navigation}) {
         .catch(error => console.log('error', error));
 
       console.log('twtest', uid);
-      const url2 =
-        'https://sb.thecityresort.com/api/user-role-additional?uid=' +
-        JSON.parse(userId);
-      fetch(url2, requestOptions)
-        .then(response => response.text())
-        .then(result => {
-          result = JSON.parse(result);
-          console.log('Tset', result.length);
-          let nameGroup = 'Group 1';
-          for (var i = 0; i < result.length; i++) {
-            if (result[i].role_id == 16) {
-              nameGroup = 'Group 2';
-            } else if (result[i].role_id == 17) {
-              nameGroup = 'Group 3';
-            }
-            data.push({
-              id: 'bd7acbeb-c1b1-46c2-aed5-' + result[i].role_id,
-              fullName: nameGroup,
-              prefix: 'security-crr' + result[i].role_id,
-              timeStamp: '12:47 PM',
-              // recentText: 'Good Day!',
-              avatarUrl:
-                'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
-            });
-          }
-          // setListData(data);
-          // console.log(data);
-        })
-        .catch(error => console.log('error', error));
     };
     getUserData();
+
+    setIsLoading(false);
   }, []);
 
   const closeRow = (rowMap, rowKey) => {
@@ -189,7 +193,12 @@ function Basic({navigation}) {
   const renderItem = ({item, index}) => (
     <Box>
       <Pressable
-        onPress={() => navigation.navigate('ChatScreen', {prefix: item.prefix})}
+        onPress={() =>
+          navigation.navigate('ChatScreen', {
+            prefix: item.prefix,
+            title: item.fullName,
+          })
+        }
         bg="white">
         <Box pl="4" pr="5" py="2">
           <HStack alignItems="center" space={3}>
@@ -260,10 +269,36 @@ function Basic({navigation}) {
 
   return (
     <Box bg="white" safeArea flex="1">
+      {isLoading ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            padding: 10,
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#0000001f',
+          }}>
+          {isLoading ? (
+            <ActivityIndicator color={'#fbbf24'} size="large" />
+          ) : (
+            <View></View>
+          )}
+        </View>
+      ) : (
+        <></>
+      )}
       <SwipeListView
         data={listData}
         renderItem={renderItem}
-        renderHiddenItem={renderHiddenItem}
+        // renderHiddenItem={renderHiddenItem}
         rightOpenValue={-130}
         previewRowKey={'0'}
         previewOpenValue={-40}

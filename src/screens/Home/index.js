@@ -112,7 +112,7 @@ export function Example({navigation}) {
           }}>
           Pemberitahuan
         </Text>
-        <View style={styles.card}>
+        {/* <View style={styles.card}>
           <View style={styles.cardImgWrapper}>
             <Image
               source={require('../../assets/images/food-banner2.jpg')}
@@ -159,7 +159,7 @@ export function Example({navigation}) {
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </Text>
           </View>
-        </View>
+        </View> */}
       </View>
     </ScrollView>
   );

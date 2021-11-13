@@ -1,60 +1,92 @@
-import React, {Component, useState, useEffect} from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
-import {VStack, Center, Input} from 'native-base';
-import {getAsyncData} from '../../asyncStorage';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, TouchableOpacity, View, Alert} from 'react-native';
+import {getAsyncData, setAsyncData} from '../../asyncStorage';
+import {
+  Stack,
+  ScrollView,
+  Text,
+  Input,
+  Divider,
+  VStack,
+  Center,
+} from 'native-base';
+const EditProfileScreen = ({navigation}) => {
+  const [userId, setUserId] = useState('');
+  const [name, setName] = useState('');
+  useEffect(() => {
+    getUserData();
+    return;
+  }, []);
 
-export class EditProfileScreen extends Component {
-  render() {
-    const [userId, setUserId] = useState('');
-    const [userName, setUserName] = useState('');
-    const [userEmail, setUserEmail] = useState('');
-    const [userPhone, setUserPhone] = useState('');
-    const [userAvatar, setUserAvatar] = useState('');
+  const getUserData = async () => {
+    const uid = await getAsyncData('uuid');
+    console.log(uid);
+    if (uid != null) {
+      setUserId(uid);
+    }
+  };
 
-    useEffect(() => {
-      const getUserData = async () => {
-        const uid = await getAsyncData('uuid');
-        const uname = await getAsyncData('uname');
-        const uemail = await getAsyncData('uemail');
-        const uphone = await getAsyncData('uphone');
-        const uavatar = await getAsyncData('uavatar');
-        setUserId(uid);
-        setUserName(uname.replace(/['"]+/g, ''));
-        setUserEmail(uemail.replace(/['"]+/g, ''));
-        setUserPhone(uphone.replace(/['"]+/g, ''));
-        setUserAvatar(uavatar.replace(/['"]+/g, ''));
-      };
-      getUserData();
-    }, []);
-    return (
-      <>
-        <View style={{flex: 1, backgroundColor: '#fff'}}>
+  const onSubmit = () => {
+    var formdata = new FormData();
+    formdata.append('name', name);
+    formdata.append('uid', userId);
+
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow',
+    };
+
+    fetch('https://sb.thecityresort.com/api/update-user', requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+        setAsyncData('uname', name);
+        navigation.navigate('MainApp');
+      })
+      .catch(error => {
+        Alert.alert('Data Tidak sesuai');
+        console.log('error', error);
+      });
+
+    // console.log(data);
+  };
+  return (
+    <>
+      <Stack
+        style={{
+          flex: 1,
+          backgroundColor: '#fff',
+          paddingTop: 10,
+          paddingLeft: 10,
+        }}>
+        <ScrollView>
+          <Text style={{padding: 5, fontWeight: 'bold'}}>Name</Text>
           <Input
-            mx="3"
-            placeholder={{userName}}
-            w={{
-              base: '75%',
-              md: '25%',
+            onChangeText={value => {
+              setName(value);
             }}
           />
-        </View>
-        <TouchableOpacity>
-          <VStack bg={'amber.500'}>
-            <Center
-              height={10}
-              width={100}
-              rounded="sm"
-              _text={{
-                color: 'warmGray.50',
-                fontWeight: 'bold',
-              }}>
-              Submit
-            </Center>
-          </VStack>
-        </TouchableOpacity>
-      </>
-    );
-  }
-}
+        </ScrollView>
+      </Stack>
+      <TouchableOpacity onPress={onSubmit}>
+        <VStack bg={'amber.500'}>
+          <Center
+            height={10}
+            width={100}
+            rounded="sm"
+            _text={{
+              color: 'warmGray.50',
+              fontWeight: 'bold',
+            }}>
+            Submit
+          </Center>
+        </VStack>
+      </TouchableOpacity>
+    </>
+  );
+};
 
 export default EditProfileScreen;
+
+const styles = StyleSheet.create({});

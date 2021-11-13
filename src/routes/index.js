@@ -16,6 +16,7 @@ import ComplaintDetail from '../screens/Complaint/ComplaintDetail';
 import ChatScreen from '../screens/Chat/ChatScreen';
 import TukarShift from '../screens/Shift';
 import EditProfileScreen from '../screens/Profile/EditProfileScreen';
+import ShiftFrom from '../screens/Shift/ShiftFrom';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -96,6 +97,11 @@ const Routes = () => {
       <Stack.Screen name="Otp" component={otp} options={{headerShown: false}} />
       <Stack.Screen name="Complaint" component={Complaint} />
       <Stack.Screen name="ComplaintDetail" component={ComplaintDetail} />
+      <Stack.Screen
+        name="ShiftFrom"
+        component={ShiftFrom}
+        options={{title: 'Tukar Shift Form'}}
+      />
       <Stack.Screen
         name="TukarShift"
         component={TukarShift}
