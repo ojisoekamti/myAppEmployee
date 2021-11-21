@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,20 +8,75 @@ import {
   Image,
 } from 'react-native';
 import {Heading, Stack, Center, VStack, ImageButton} from 'native-base';
+import {getAsyncData} from '../../asyncStorage';
+import moment from 'moment';
+
 const Complaint = ({navigation}) => {
+  const [data, setData] = useState([]);
+  // let data = [];
+  useEffect(() => {
+    const getUserData = async () => {
+      const uid = await getAsyncData('uuid');
+      console.log(uid);
+      var url = 'https://sb.thecityresort.com/api/user-tickets?uid=' + uid;
+      // console.log(url);
+      var formdata = new FormData();
+
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
+
+      fetch(url, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          result = JSON.parse(result);
+          setData(result);
+          // for (let i = 0; i < result.length; i++) {
+          //   let row = result[i];
+          //   console.log(row);
+          // }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+      return () => {};
+    };
+
+    getUserData();
+  }, []);
+
   return (
     <View style={{backgroundColor: '#fff', flex: 1, alignItems: 'center'}}>
-    <Text>No Data Available</Text>
-      {/* <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ComplaintDetail')}>
-        <View style={styles.cardInfo}>
-          <Text style={styles.cardTitle}>Barang Mencurigakan</Text>
-          <Text style={styles.cardDetails}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </Text>
-          <Text style={styles.cardDetails}>2021-08-20 12:34:00</Text>
-        </View>
-      </TouchableOpacity> */}
+      {/* <Text>No Data Available</Text> */}
+      {data.map((item, index) => {
+        return (
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() =>
+              navigation.navigate('ComplaintDetail', {
+                id: item.id,
+                title: item.title,
+                date: moment(item.created_at).format('DD-MM-YYYY hh:mm:ss'),
+                description:item.description,
+                realisasi:item.realization,
+                
+              })
+            }>
+            <View style={styles.cardInfo}>
+              <Text style={styles.cardTitle}>{item.title}</Text>
+              <Text style={styles.cardDetails}>
+                {/* {data} */}
+                {item.description}
+              </Text>
+              <Text style={styles.cardDetails}>
+                {moment(item.created_at).format('DD-MM-YYYY hh:mm:ss')}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        );
+      })}
       {/* <TouchableOpacity style={styles.card}>
         <View style={styles.cardInfo}>
           <Text style={styles.cardTitle}>Lorem Ipsum</Text>

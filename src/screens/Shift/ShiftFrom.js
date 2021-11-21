@@ -13,31 +13,57 @@ import {
   Input,
   ScrollView,
   keyboardDismissHandlerManager,
+  Select,
 } from 'native-base';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {getAsyncData} from '../../asyncStorage';
 import moment from 'moment';
+// import Picker from 'react-native-simple-modal-picker';
 
 const ShiftFrom = ({navigation}) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [isDatePickerVisibleTo, setDatePickerVisibilityTo] = useState(false);
-  const [dateTo, setDateTo] = useState('');
-  const [timeTo, setTimeTo] = useState('');
   const [description, setDescription] = useState('');
   const [delegate, setDelegate] = useState('');
   const [userId, setUserId] = useState('');
+  let [language, setLanguage] = React.useState('');
+  const [items, setItems] = useState([]);
+  const [shift, setShift] = useState('');
+  const [minDatePicker, setMinDatePicker] = useState('');
   useEffect(() => {
     getUserData();
-    return;
   }, []);
 
   const getUserData = async () => {
     const uid = await getAsyncData('uuid');
-    console.log(uid);
+    const urole = await getAsyncData('urole');
+    // console.log(uid);
     if (uid != null) {
+      var url =
+        'https://sb.thecityresort.com/api/get-user-delegate?uid=' +
+        uid +
+        '&role=' +
+        urole;
+      // console.log(url);
+      var formdata = new FormData();
+
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
+
+      fetch(url, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          result = JSON.parse(result);
+          console.log(result);
+          setItems(result);
+        })
+        .catch(error => {
+          console.log(error);
+        });
       setUserId(uid);
+      setMinDatePicker(new Date(moment(new Date()).add(2, 'days')));
     }
   };
 
@@ -51,48 +77,39 @@ const ShiftFrom = ({navigation}) => {
   };
 
   const handleConfirm = date => {
-    console.warn('A date has been picked: ', date);
+    // console.warn('A date has been picked: ', date);
     setDate(moment(date).format('D-M-YYYY'));
-    setTime(moment(date).format('hh:mm:ss'));
     Keyboard.dismiss();
     hideDatePicker();
   };
 
-  const showDatePickerTo = () => {
-    setDatePickerVisibilityTo(true);
-  };
-
-  const hideDatePickerTo = () => {
-    setDatePickerVisibilityTo(false);
-    Keyboard.dismiss();
-  };
-
-  const handleConfirmTo = datetime => {
-    console.warn('A date has been picked: ', datetime);
-    setDateTo(moment(datetime).format('D-M-YYYY'));
-    setTimeTo(moment(datetime).format('hh:mm:ss'));
-    Keyboard.dismiss();
-    hideDatePickerTo();
-  };
   const onSubmit = () => {
     const data = {
       date: date,
-      time: time,
-      dateTo: dateTo,
-      timeTo: timeTo,
       description: description,
       delegate: delegate,
       userId: userId,
+      shift: shift,
     };
-
+    if (date == '') {
+      Alert.alert('Pilih Tanggal');
+      return;
+    } else if (description == '') {
+      Alert.alert('Isi Description');
+      return;
+    } else if (delegate == '') {
+      Alert.alert('Pilih Delegation');
+      return;
+    } else if (shift == '') {
+      Alert.alert('Pilih Shift');
+      return;
+    }
     var formdata = new FormData();
     formdata.append('date', date);
-    formdata.append('time', time);
-    formdata.append('dateTo', dateTo);
-    formdata.append('timeTo', timeTo);
     formdata.append('description', description);
     formdata.append('delegate', delegate);
     formdata.append('user_id', userId);
+    formdata.append('shift', shift);
 
     var requestOptions = {
       method: 'POST',
@@ -121,31 +138,30 @@ const ShiftFrom = ({navigation}) => {
           backgroundColor: '#fff',
           paddingTop: 10,
           paddingLeft: 10,
+          paddingRight: 10,
         }}>
         <ScrollView>
-          <Text style={{padding: 5, fontWeight: 'bold'}}>from</Text>
+          <Text style={{padding: 5, fontWeight: 'bold'}}>Date</Text>
           <Input onPressIn={() => showDatePicker('date')} value={date} />
-          <Divider my="2" />
-          <Input onPressIn={() => showDatePicker('time')} value={time} />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
-            mode={'datetime'}
+            mode={'date'}
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
-          />
-          <Divider my="2" />
-          <Text style={{padding: 5, fontWeight: 'bold'}}>To</Text>
-          <Input onPressIn={() => showDatePickerTo()} value={dateTo} />
-          <Divider my="2" />
-          <Input onPressIn={() => showDatePickerTo()} value={timeTo} />
-          <DateTimePickerModal
-            isVisible={isDatePickerVisibleTo}
-            mode={'datetime'}
-            onConfirm={handleConfirmTo}
-            onCancel={hideDatePickerTo}
+            minimumDate={minDatePicker == '' ? new Date() : minDatePicker}
           />
           <Divider my="2" />
 
+          <Select
+            placeholder="Select Shift "
+            selectedValue={shift}
+            // width={150}
+            onValueChange={itemValue => setShift(itemValue)}>
+            <Select.Item label="Pagi" value="1" />
+            <Select.Item label="Siang" value="2" />
+            <Select.Item label="Malam" value="3" />
+          </Select>
+          <Divider my="2" />
           <Text style={{padding: 5, fontWeight: 'bold'}}>Description</Text>
           <TextArea
             onChangeText={value => {
@@ -155,11 +171,18 @@ const ShiftFrom = ({navigation}) => {
 
           <Divider my="2" />
           <Text style={{padding: 5, fontWeight: 'bold'}}>Delegate To</Text>
-          <Input
-            onChangeText={value => {
-              setDelegate(value);
-            }}
-          />
+
+          <Select
+            placeholder="Select Delegate"
+            selectedValue={delegate}
+            // width={150}
+            onValueChange={itemValue => setDelegate(itemValue)}>
+            {items.map((item, index) => {
+              return (
+                <Select.Item key={index} label={item.lev1} value={item.lev1} />
+              );
+            })}
+          </Select>
         </ScrollView>
       </Stack>
       <TouchableOpacity onPress={onSubmit}>

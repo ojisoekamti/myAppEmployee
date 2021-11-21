@@ -31,7 +31,7 @@ const Profile = ({navigation}) => {
       setUserAvatar(uavatar.replace(/['"]+/g, ''));
     };
     getUserData();
-  }, []);
+  }, [setUserId, setUserName, setUserEmail, setUserPhone, setUserAvatar]);
 
   return (
     <SafeAreaView style={styles.container}>
