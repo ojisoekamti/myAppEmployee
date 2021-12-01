@@ -1,23 +1,66 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, TouchableOpacity, Keyboard, Alert} from 'react-native';
-import {Text, View, Stack, TextArea, Center, ScrollView} from 'native-base';
+import {
+  Text,
+  View,
+  Stack,
+  TextArea,
+  Center,
+  ScrollView,
+  Input,
+} from 'native-base';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {getAsyncData} from '../../asyncStorage';
 import moment from 'moment';
 // import Picker from 'react-native-simple-modal-picker';
 
-const ApprovalForm = ({navigation}) => {
+const ApprovalForm = ({navigation, route}) => {
   const [description, setDescription] = useState('');
+  const [itemData, setItemData] = useState('');
+  const [isDelegate, setIsDelegate] = useState(false);
+  const [date, setDate] = useState('');
+  const [name, setName] = useState('');
+  const [userId, setUserId] = useState('');
   useEffect(() => {
     getUserData();
+    setItemData(route.params.item);
   }, []);
 
   const getUserData = async () => {
     const uid = await getAsyncData('uuid');
+    const uname = await getAsyncData('uname');
     const urole = await getAsyncData('urole');
+    setName(uname);
+    setUserId(uid);
   };
 
-  const onSubmit = () => {
-    navigation.navigate('MainApp');
+  const onSubmit = value => {
+    console.log(value);
+
+    var formdata = new FormData();
+    formdata.append('id', itemData.id);
+    formdata.append('uid', userId);
+    formdata.append('approve', value);
+
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow',
+    };
+
+    fetch(
+      'https://sb.thecityresort.com/api/approve-tukar-shift',
+      requestOptions,
+    )
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+        navigation.navigate('MainApp');
+      })
+      .catch(error => {
+        Alert.alert('Data Tidak sesuai');
+        console.log('error', error);
+      });
   };
   return (
     <>
@@ -40,7 +83,9 @@ const ApprovalForm = ({navigation}) => {
       </Stack>
 
       <View style={styles.container}>
-        <TouchableOpacity style={styles.buttonContainer} onPress={onSubmit}>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => onSubmit(true)}>
           <Center
             title="Test"
             style={styles.button}
@@ -48,11 +93,13 @@ const ApprovalForm = ({navigation}) => {
             Approve
           </Center>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={onSubmit}>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => onSubmit(false)}>
           <Center
             title="Test"
             style={styles.button}
-            backgroundColor={'pink.600'}>
+            backgroundColor={'error.600'}>
             Reject
           </Center>
         </TouchableOpacity>

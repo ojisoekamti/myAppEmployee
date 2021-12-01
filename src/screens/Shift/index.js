@@ -14,89 +14,61 @@ import {
   Divider,
   Stack,
   TextArea,
+  ScrollView,
 } from 'native-base';
 import {getAsyncData} from '../../asyncStorage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-export function ShiftDetail({
-  date,
-  from,
-  to,
-  delegate,
-  action,
-  description,
-  nextApprover,
-  approval,
-}) {
+export function ShiftSchedDetail({shiftId}) {
+  if (shiftId == 1) {
+    return 'Pagi';
+  } else if (shiftId == 2) {
+    return 'Siang';
+  } else {
+    return 'Malam';
+  }
+  return null;
+}
+
+export function ApprovalDetail({approval, dataApproval, navigation}) {
   return (
     <>
-      {date != '' && approval == false ? (
-        <View style={{backgroundColor: '#fff', flex: 1, paddingHorizontal: 20}}>
-          <Heading>Tukar Shift</Heading>
-          <Heading size="sm">Tanggal {date}</Heading>
-          <Heading size="xs">{description}</Heading>
-          <Text fontSize="xs">
-            Pengganti : <Text bold>{delegate}</Text>
-          </Text>
-          <Text fontSize="xs">
-            Next Approval : <Text bold>{nextApprover}</Text>
-          </Text>
-          <Text>
-            Status :{' '}
-            <Text
-              highlight
-              _dark={{
-                color: 'coolgray.800',
-              }}>
-              {action ? action : 'Waiting For Approval'}
-            </Text>
-          </Text>
+      {approval ? (
+        <View style={{alignItems: 'center', backgroundColor: '#fff'}}>
+          <Heading size="sm">Tukar Shift List Approval</Heading>
         </View>
       ) : (
         <></>
       )}
-    </>
-  );
-}
-
-export function ApprovalDetail({
-  date,
-  from,
-  to,
-  delegate,
-  action,
-  description,
-  nextApprover,
-  approval,
-  pemohon,
-}) {
-  return (
-    <>
       {approval ? (
-        <View style={{backgroundColor: '#fff', flex: 1, paddingHorizontal: 20}}>
-          <Heading>Tukar Shift Approval</Heading>
-          <Heading size="sm">Tanggal {date}</Heading>
-          <Heading size="xs">{description}</Heading>
-          <Text fontSize="xs">
-            Pemohon : <Text bold>{pemohon}</Text>
-          </Text>
-          <Text fontSize="xs">
-            Pengganti : <Text bold>{delegate}</Text>
-          </Text>
-          <Text fontSize="xs">Butuh Approval untuk Tukar shift Berikut </Text>
-          <Text>
-            Status :{' '}
-            <Text
-              highlight
-              _dark={{
-                color: 'coolgray.800',
+        dataApproval.map((item, index) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              style={(styles.card, {backgroundColor: '#fff'})}
+              onPress={() => {
+                navigation.navigate('ApprovalForm', {item: item});
               }}>
-              {action ? action : 'Waiting For Approval'}
-            </Text>
-          </Text>
-        </View>
+              <View style={styles.cardInfo}>
+                <Text style={styles.cardTitle}>Approval</Text>
+                <Text style={styles.cardDetails}>
+                  {/* {data} */}
+                  Permohonan Approval {'\n'}Pemohon : {item.pemohon}
+                  {'\n'}Pengganti : {item.delegate}
+                  {'\n'}
+                  Tanggal : {item.date}
+                  {'\n'}
+                  keterangan : {item.description}
+                  {'\n'}
+                  Shift : <ShiftSchedDetail shiftId={item.shift_sched} />
+                  {'\n'}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })
       ) : (
         <></>
       )}
@@ -115,9 +87,12 @@ const TukarShift = ({navigation}) => {
   const [date, setDate] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [approval, setApproval] = useState(false);
+  const [idForm, setIdForm] = useState('');
+  const [idPemohon, setIdPemohon] = useState('');
   const [pemohon, setPemohon] = useState('');
   const [idShift, setIdShift] = useState('');
   const [uidSet, setUid] = useState('');
+  const [dataApproval, setDataApproval] = useState([]);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -144,16 +119,21 @@ const TukarShift = ({navigation}) => {
       .then(response => response.text())
       .then(result => {
         result = JSON.parse(result);
+        setIsLoading(true);
         if (result.id > 0) {
+          setIdForm(result.id);
+          setIdPemohon(result.pemohon);
           setDate(result.date);
           setFrom(result.from);
-          setTo(result.to);
+          setTo(result.date_to);
           setDelegate(result.delegate);
           setAction(result.action);
           setDescription(result.description);
           setDisabled(true);
           setNextApprover(result.next_approver);
         } else {
+          setIdForm('');
+          setIdPemohon('');
           setFrom('');
           setTo('');
           setDelegate('');
@@ -162,8 +142,11 @@ const TukarShift = ({navigation}) => {
           setDisabled(false);
           setNextApprover('');
         }
+        setIsLoading(false);
       })
       .catch(error => {
+        setIdForm('');
+        setIdPemohon('');
         setFrom('');
         setTo('');
         setDelegate('');
@@ -188,17 +171,9 @@ const TukarShift = ({navigation}) => {
       .then(results => {
         let result = [];
         results = JSON.parse(results);
-        if (results.id != null) {
+        if (results.length > 0) {
+          setDataApproval(results);
           setApproval(true);
-          setIdShift(results.id);
-          setDate(results.date);
-          setFrom(results.from);
-          setTo(results.to);
-          setDelegate(results.delegate);
-          setAction(results.action);
-          setDescription(results.description);
-          setPemohon(results.pemohon);
-          setNextApprover(results.next_approver);
           setDisabled(true);
         } else {
           setApproval(false);
@@ -211,7 +186,6 @@ const TukarShift = ({navigation}) => {
 
   return (
     <>
-      {console.log(isLoading)}
       {isLoading ? (
         <View
           style={{
@@ -223,76 +197,14 @@ const TukarShift = ({navigation}) => {
         </View>
       ) : (
         <>
-          <ShiftDetail
-            date={date}
-            from={from}
-            to={to}
-            delegate={delegate}
-            action={action}
-            description={description}
-            nextApprover={nextApprover}
-            approval={approval}
-          />
-          <ApprovalDetail
-            date={date}
-            from={from}
-            to={to}
-            delegate={delegate}
-            action={action}
-            description={description}
-            nextApprover={nextApprover}
-            approval={approval}
-            pemohon={pemohon}
-            idShift={idShift}
-          />
-
-          <TouchableOpacity style={styles.card} onPress={() => {}}>
-            <View style={styles.cardInfo}>
-              <Text style={styles.cardTitle}>Approval</Text>
-              <Text style={styles.cardDetails}>
-                {/* {data} */}
-                Permohonan tukar shift antara pemohon Anggota Danru 1 kepada Anggota 2, pada tanggal 20 November 2021, dengan keterangan
-                Test
-              </Text>
-              <Text>
-                Shift : Pagi 
-              </Text>
-
-              <Text style={styles.cardDetails}>Tanggal 20 November 2021</Text>
-            </View>
-          </TouchableOpacity>
-          <View
-            style={{backgroundColor: '#fff', flex: 1, alignItems: 'center'}}>
-            <View style={styles.bottom}>
-              <TouchableOpacity
-                disabled={approval ? false : disabled}
-                onPress={() => {
-                  if (approval) {
-                    navigation.navigate('ApprovalForm');
-                  } else {
-                    navigation.navigate('ShiftFrom', {idShift: idShift});
-                  }
-                }}>
-                <Center
-                  height={10}
-                  width={300}
-                  bg={approval ? 'warning.500' : 'success.500'}
-                  rounded="sm"
-                  _text={{
-                    color: 'warmGray.50',
-                    fontWeight: 'bold',
-                    fontSize: 20,
-                  }}
-                  shadow={'3'}>
-                  {approval
-                    ? 'Approve'
-                    : disabled
-                    ? 'Tukar Shift di Proses'
-                    : 'Proses Tukar Shift'}
-                </Center>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <ScrollView>
+            <ApprovalDetail
+              approval={approval}
+              idShift={idShift}
+              dataApproval={dataApproval}
+              navigation={navigation}
+            />
+          </ScrollView>
         </>
       )}
     </>

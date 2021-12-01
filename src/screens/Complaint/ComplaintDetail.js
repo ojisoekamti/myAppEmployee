@@ -20,18 +20,24 @@ const ComplaintDetail = ({route, navigation}) => {
   const [penyelesaian, setPenyelesaian] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [singleFile, setSingleFile] = useState(null);
+  const [singleFileResult, setSingleFileResult] = useState(null);
 
   useEffect(() => {
     if (route.params.realisasi != '') {
       setRealisasi(route.params.realisasi);
       setDisabled(true);
     }
+    if (route.params.singleFile != '') {
+      console.log(route.params.singleFile);
+      setSingleFile(route.params.singleFile);
+    }
+    if (route.params.singleFile != '') {
+      setSingleFileResult(route.params.singleFileResult);
+    }
     return () => {};
   }, []);
 
   const chooseFile = (...props) => {
-    console.log(props[0].user);
-    console.log(props[0].prefix);
     // return;
     let options = {
       maxWidth: 500,
@@ -80,10 +86,8 @@ const ComplaintDetail = ({route, navigation}) => {
           .then(response => response.text())
           .then(result => {
             let results = JSON.parse(result);
-            console.log(results.file);
-            console.log(source.assets[0].uri);
-            // console.log(newMessages);
-            setSingleFile(source.assets[0].uri);
+            console.log(results);
+            setSingleFile(results.file);
           })
           .catch(error => {
             console.log('error', error);
@@ -102,9 +106,7 @@ const ComplaintDetail = ({route, navigation}) => {
     });
   };
 
-  const choosePhoto = (...props) => {
-    console.log(props[0].user);
-    console.log(props[0].prefix);
+  const chooseFileResult = (...props) => {
     // return;
     let options = {
       maxWidth: 500,
@@ -122,7 +124,7 @@ const ComplaintDetail = ({route, navigation}) => {
       //     path: 'images',
       // },
     };
-    launchCamera(options, response => {
+    launchImageLibrary(options, response => {
       console.log('Response = ', response);
 
       if (response.didCancel) {
@@ -153,7 +155,71 @@ const ComplaintDetail = ({route, navigation}) => {
           .then(response => response.text())
           .then(result => {
             let results = JSON.parse(result);
-            console.log(results.file);
+            console.log(results);
+            setSingleFileResult(results.file);
+          })
+          .catch(error => {
+            console.log('error', error);
+          });
+
+        // You can also display the image using data:
+        // let source = {
+        //   uri: 'data:image/jpeg;base64,' + response.data
+        // };
+        // setState({
+        //   ...state,
+        //   imagePath: source,
+        //   imagePickerVisible: true,
+        // });
+      }
+    });
+  };
+
+  const choosePhoto = (...props) => {
+    // return;
+    let options = {
+      maxWidth: 500,
+      maxHeight: 500,
+      mediaType: 'photo',
+      // title: 'Select Image',
+      // customButtons: [
+      //     {
+      //         name: 'customOptionKey',
+      //         title: 'Choose Photo from Custom Option'
+      //     },
+      // ],
+      // storageOptions: {
+      //     skipBackup: true,
+      //     path: 'images',
+      // },
+    };
+    launchCamera(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        Alert.alert(response.customButton);
+      } else {
+        let source = response;
+        var formdata = new FormData();
+        formdata.append('file', {
+          uri: source.assets[0].uri,
+          name: source.assets[0].fileName,
+          type: source.assets[0].type,
+        });
+        // console.log(formdata);
+        var requestOptions = {
+          method: 'POST',
+          body: formdata,
+          redirect: 'follow',
+        };
+
+        fetch('https://sb.thecityresort.com/api/upload', requestOptions)
+          .then(response => response.text())
+          .then(result => {
+            let results = JSON.parse(result);
             // console.log(newMessages);
             setSingleFile(source.assets[0].uri);
           })
@@ -180,11 +246,12 @@ const ComplaintDetail = ({route, navigation}) => {
       realisasi: realisasi,
       penyelesaian: penyelesaian,
     };
-    console.log(dataTest);
     var formdata = new FormData();
     formdata.append('id', route.params.id);
     formdata.append('realisasi', realisasi);
     formdata.append('penyelesaian', penyelesaian);
+    formdata.append('realization_image', singleFile);
+    formdata.append('result_image', singleFileResult);
 
     var requestOptions = {
       method: 'POST',
@@ -195,7 +262,6 @@ const ComplaintDetail = ({route, navigation}) => {
     fetch('https://sb.thecityresort.com/api/update-tickets', requestOptions)
       .then(response => response.text())
       .then(result => {
-        console.log(result);
         navigation.navigate('MainApp');
       })
       .catch(error => {
@@ -214,14 +280,21 @@ const ComplaintDetail = ({route, navigation}) => {
           paddingRight: 10,
         }}>
         <ScrollView>
-          <Box>
-            <Heading size="lg" style={{}}>
-              {route.params.title}
+          <View>
+            <Heading>{route.params.title.toUpperCase()}</Heading>
+            <Heading color="emerald.400" size="md">
+              {route.params.tranNumber}
             </Heading>
-            <Divider my="2" />
-          </Box>
-          <Text style={{padding: 5, fontWeight: 'bold'}}>Keterangan</Text>
-          <Text>{route.params.description}</Text>
+            <Heading color="emerald.400" size="sm">
+              {route.params.date}
+            </Heading>
+            <Text pt="3" fontWeight="md">
+              {route.params.description}
+            </Text>
+            <Text pt="3" fontWeight="md">
+              {route.params.unit_name}
+            </Text>
+          </View>
           <Divider my="2" />
           <Text style={{padding: 5, fontWeight: 'bold'}}>Realisasi</Text>
           <TextArea
@@ -230,21 +303,33 @@ const ComplaintDetail = ({route, navigation}) => {
             onChangeText={value => {
               setRealisasi(value);
             }}
-            editable={route.params.realisasi != null ? false : true}
+            editable={
+              route.params.realisasi != null
+                ? false
+                : route.params.user_id != null
+                ? false
+                : true
+            }
           />
 
           <Divider my="2" />
-          {console.log(singleFile)}
-          <Image
-            source={{uri: singleFile}}
-            style={{width: 200, height: 200}}
-            alt="Not Available"
-          />
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            activeOpacity={0.5}
-            onPress={chooseFile}>
-            <Text style={styles.buttonTextStyle}>Pilih gambar atau ambil Photo</Text>
+          <TouchableOpacity onPress={chooseFile}>
+            <View>
+              {console.log(singleFile)}
+              <Image
+                source={
+                  singleFile != null
+                    ? {
+                        uri:
+                          'https://sb.thecityresort.com/storage/files/' +
+                          singleFile,
+                      }
+                    : require('../../assets/images/dummy-image-square.jpg')
+                }
+                style={{width: 100, height: 100, padding: 20}}
+                alt="Not Available"
+              />
+            </View>
           </TouchableOpacity>
           <Divider my="2" />
           <Text style={{padding: 5, fontWeight: 'bold'}}>Penyelesaian</Text>
@@ -254,19 +339,32 @@ const ComplaintDetail = ({route, navigation}) => {
             onChangeText={value => {
               setPenyelesaian(value);
             }}
-            editable={route.params.realisasi != null ? true : false}
+            editable={
+              route.params.realisasi != null
+                ? route.params.user_id != null
+                  ? false
+                  : true
+                : false
+            }
             // disabled={disabled}
           />
-          <Image
-            source={{uri: singleFile}}
-            style={{width: 200, height: 200}}
-            alt="Not Available"
-          />
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            activeOpacity={0.5}
-            onPress={chooseFile}>
-            <Text style={styles.buttonTextStyle}>Pilih gambar atau ambil Photo</Text>
+          <Divider my="2" />
+          <TouchableOpacity onPress={chooseFileResult}>
+            <View>
+              <Image
+                source={
+                  singleFileResult != null
+                    ? {
+                        uri:
+                          'https://sb.thecityresort.com/storage/files/' +
+                          singleFileResult,
+                      }
+                    : require('../../assets/images/dummy-image-square.jpg')
+                }
+                style={{width: 100, height: 100, padding: 20}}
+                alt="Not Available"
+              />
+            </View>
           </TouchableOpacity>
         </ScrollView>
       </Stack>

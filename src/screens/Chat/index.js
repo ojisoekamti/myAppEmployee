@@ -78,15 +78,21 @@ function Basic({navigation}) {
             } else if (result[i].role_id == 17) {
               nameGroup = 'Group 3';
             }
-            data.push({
-              id: 'bd7acbeb-c1b1-46c2-aed5-' + result[i].role_id,
-              fullName: nameGroup,
-              prefix: 'security-crr' + result[i].role_id,
-              timeStamp: '12:47 PM',
-              // recentText: 'Good Day!',
-              avatarUrl:
-                'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
-            });
+            if (
+              result[i].role_id == 16 ||
+              result[i].role_id == 17 ||
+              result[i].role_id == 15
+            ) {
+              data.push({
+                id: 'bd7acbeb-c1b1-46c2-aed5-' + result[i].role_id,
+                fullName: nameGroup,
+                prefix: 'security-crr' + result[i].role_id,
+                timeStamp: '12:47 PM',
+                // recentText: 'Good Day!',
+                avatarUrl:
+                  'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
+              });
+            }
           }
           // setListData(data);
           // console.log(data);

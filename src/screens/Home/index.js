@@ -5,6 +5,9 @@ import {
   Center,
   NativeBaseProvider,
   Badge,
+  Menu,
+  Pressable,
+  HamburgerIcon,
 } from 'native-base';
 import React from 'react';
 import {
@@ -57,18 +60,31 @@ export function Example({navigation}) {
       </View>
 
       <View style={styles.categoryContainer}>
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() => navigation.navigate('TukarShift')}>
-          <View style={styles.categoryIcon}>
-            <MaterialCommunityIcons
-              name="account-switch-outline"
-              size={35}
-              color="#d97706"
-            />
-          </View>
-          <Text style={styles.categoryBtnTxt}>Tukar Shift </Text>
-        </TouchableOpacity>
+        <Menu
+          w="190"
+          trigger={triggerProps => {
+            return (
+              <TouchableOpacity style={styles.categoryBtn} {...triggerProps}>
+                <View style={styles.categoryIcon}>
+                  <MaterialCommunityIcons
+                    name="account-switch-outline"
+                    size={35}
+                    color="#d97706"
+                  />
+                </View>
+                <Text style={styles.categoryBtnTxt}>Tukar Shift </Text>
+              </TouchableOpacity>
+            );
+          }}>
+          <Menu.Item
+            onPress={() => navigation.navigate('ShiftFrom', {idForm: ''})}>
+            Tukar Shift Request
+          </Menu.Item>
+          <Menu.Item onPress={() => navigation.navigate('TukarShift')}>
+            List Approval
+          </Menu.Item>
+        </Menu>
+
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => navigation.navigate('Complaint')}>
@@ -179,7 +195,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:"#fff"
+    backgroundColor: '#fff',
   },
   sliderContainer: {
     height: 200,

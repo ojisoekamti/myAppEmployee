@@ -31,6 +31,7 @@ const Complaint = ({navigation}) => {
         .then(response => response.text())
         .then(result => {
           result = JSON.parse(result);
+          console.log(result);
           setData(result);
           // for (let i = 0; i < result.length; i++) {
           //   let row = result[i];
@@ -53,15 +54,20 @@ const Complaint = ({navigation}) => {
       {data.map((item, index) => {
         return (
           <TouchableOpacity
+            key={index}
             style={styles.card}
             onPress={() =>
               navigation.navigate('ComplaintDetail', {
                 id: item.id,
                 title: item.title,
                 date: moment(item.created_at).format('DD-MM-YYYY hh:mm:ss'),
-                description:item.description,
-                realisasi:item.realization,
-                
+                description: item.description,
+                realisasi: item.realization,
+                singleFile: item.realization_image,
+                singleFileResult: item.result_image,
+                tranNumber: item.tranNumber,
+                unit_name: item.unit_name,
+                user_id: item.user_id,
               })
             }>
             <View style={styles.cardInfo}>
