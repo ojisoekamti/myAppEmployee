@@ -8,10 +8,12 @@ import {
   TouchableRipple,
 } from 'react-native-paper';
 import {getAsyncData} from '../../asyncStorage';
+import {NavigationContainer, useIsFocused} from '@react-navigation/native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Profile = ({navigation}) => {
+  const isFocused = useIsFocused();
   const [userId, setUserId] = useState('');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -31,7 +33,7 @@ const Profile = ({navigation}) => {
       setUserAvatar(uavatar.replace(/['"]+/g, ''));
     };
     getUserData();
-  }, [setUserId, setUserName, setUserEmail, setUserPhone, setUserAvatar]);
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>

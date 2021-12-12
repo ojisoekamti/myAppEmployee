@@ -18,6 +18,7 @@ import TukarShift from '../screens/Shift';
 import EditProfileScreen from '../screens/Profile/EditProfileScreen';
 import ShiftFrom from '../screens/Shift/ShiftFrom';
 import ApprovalForm from '../screens/Shift/ApprovalForm';
+import ContactListScreen from '../screens/Chat/ContactListScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -94,6 +95,8 @@ const Routes = () => {
         component={Login}
         options={{headerShown: false}}
       />
+      <Stack.Screen name="ContactListScreen" component={ContactListScreen}
+        options={{title: 'Contact List'}} />
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="Otp" component={otp} options={{headerShown: false}} />
       <Stack.Screen name="Complaint" component={Complaint} />
