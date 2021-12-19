@@ -12,6 +12,7 @@ import {
   Button,
 } from 'native-base';
 import Home from '../Home';
+import Splash from '../Splash';
 
 import {getAsyncData, deleteAsyncData, setAsyncData} from '../../asyncStorage';
 
@@ -50,7 +51,7 @@ const Otp = ({route, navigation}) => {
         setAsyncData('uphone', userPhone);
         setAsyncData('uavatar', userAvatar);
         setAsyncData('urole', userRole);
-        navigation.navigate('Home');
+        navigation.navigate('Splash');
       }
     }
   };

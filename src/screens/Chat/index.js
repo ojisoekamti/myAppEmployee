@@ -31,7 +31,10 @@ import {TabView, SceneMap} from 'react-native-tab-view';
 import ActionButton from 'react-native-action-button';
 import {useNavigation} from '@react-navigation/native';
 
+import {NavigationContainer, useIsFocused} from '@react-navigation/native';
+
 const FirstRoute = () => {
+  const isFocused = useIsFocused();
   const [userId, setUserId] = useState('');
   const [userName, setUserName] = useState('');
   const [userRole, setUserRole] = useState('');
@@ -184,7 +187,7 @@ const FirstRoute = () => {
     getUserData();
 
     setIsLoading(false);
-  }, []);
+  }, [isFocused]);
 
   const closeRow = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
@@ -283,32 +286,6 @@ const FirstRoute = () => {
 
   return (
     <Box bg="white" safeArea flex="1">
-      {isLoading ? (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            padding: 10,
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#0000001f',
-          }}>
-          {isLoading ? (
-            <ActivityIndicator color={'#fbbf24'} size="large" />
-          ) : (
-            <View></View>
-          )}
-        </View>
-      ) : (
-        <></>
-      )}
       <SwipeListView
         data={listData}
         renderItem={renderItem}
@@ -324,6 +301,7 @@ const FirstRoute = () => {
 };
 
 const SecondRoute = () => {
+  const isFocused = useIsFocused();
   const [userId, setUserId] = useState('');
   const [userName, setUserName] = useState('');
   const [userRole, setUserRole] = useState('');
@@ -332,6 +310,7 @@ const SecondRoute = () => {
   let data = [];
   const navigation = useNavigation();
   React.useEffect(() => {
+    setIsLoading(true);
     if (listData.length > 0) {
       return;
     }
@@ -369,7 +348,9 @@ const SecondRoute = () => {
         .catch(error => console.log('error', error));
     };
     getUserData();
-  });
+
+    setIsLoading(false);
+  }, [isFocused]);
 
   const onRowDidOpen = rowKey => {
     console.log('This row opened', rowKey);

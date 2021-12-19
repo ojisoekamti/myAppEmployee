@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, BackHandler, useFocusEffect} from 'react';
 import {GiftedChat} from 'react-native-gifted-chat';
 import initialMessages from './messages';
 import {
@@ -18,6 +18,7 @@ import {
 import {firebaseInit, pushData} from '../../services/firebase';
 import * as firebaseData from 'firebase';
 import {getAsyncData} from '../../asyncStorage';
+import {Button} from 'react-native';
 
 const Chats = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
@@ -28,7 +29,10 @@ const Chats = ({route, navigation}) => {
   useEffect(() => {
     firebaseInit;
     // console.log(route.params.title);
-    navigation.setOptions({title: route.params.title});
+    navigation.setOptions({
+      title: route.params.title,
+    });
+
     const getUserData = async () => {
       const uid = await getAsyncData('uuid');
       const uname = await getAsyncData('uname');
@@ -57,6 +61,7 @@ const Chats = ({route, navigation}) => {
         setMessages(results);
       });
   }, []);
+
   const onSend = (newMessages = []) => {
     setMessages(prevMessages => GiftedChat.append(prevMessages, newMessages));
     newMessages[0].createdAt = new Date().getTime();

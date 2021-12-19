@@ -31,7 +31,7 @@ const ComplaintDetail = ({route, navigation}) => {
       console.log(route.params.singleFile);
       setSingleFile(route.params.singleFile);
     }
-    if (route.params.singleFile != '') {
+    if (route.params.singleFileResult != '') {
       setSingleFileResult(route.params.singleFileResult);
     }
     return () => {};
@@ -313,16 +313,24 @@ const ComplaintDetail = ({route, navigation}) => {
           />
 
           <Divider my="2" />
-          <TouchableOpacity onPress={chooseFile}>
+          <TouchableOpacity
+            onPress={chooseFile}
+            disabled={
+              route.params.realisasi != null
+                ? true
+                : route.params.user_id != null
+                ? true
+                : false
+            }>
             <View>
               {console.log(singleFile)}
               <Image
                 source={
-                  singleFile != null
+                  route.params.singleFile != null
                     ? {
                         uri:
                           'https://sb.thecityresort.com/storage/files/' +
-                          singleFile,
+                          route.params.singleFile,
                       }
                     : require('../../assets/images/dummy-image-square.jpg')
                 }
@@ -349,7 +357,15 @@ const ComplaintDetail = ({route, navigation}) => {
             // disabled={disabled}
           />
           <Divider my="2" />
-          <TouchableOpacity onPress={chooseFileResult}>
+          <TouchableOpacity
+            onPress={chooseFileResult}
+            disabled={
+              route.params.realisasi != null
+                ? true
+                : route.params.user_id != null
+                ? true
+                : false
+            }>
             <View>
               <Image
                 source={

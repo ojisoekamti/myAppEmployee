@@ -11,6 +11,7 @@ import {
 import {getAsyncData} from '../../asyncStorage';
 import uuid from 'react-native-uuid';
 //const navigation = useNavigation();
+/**
 const contacts = [
   {
     index: 2,
@@ -68,8 +69,7 @@ const contacts = [
     index: 19,
     name: 'User ME',
   },
-];
-
+];  */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -89,10 +89,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class ContactsList extends Component {
+export default class ContactsList extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      contacts: [],
+      isLoaded: false,
+    };
     this.onPress = this.onPress.bind(this);
   }
 
@@ -105,7 +109,7 @@ export default class ContactsList extends Component {
         title: currChar,
       };
 
-      let currContacts = contacts.filter(item => {
+      let currContacts = this.state.contacts.filter(item => {
         return item.name[0].toUpperCase() === currChar;
       });
       if (currContacts.length > 0) {
@@ -123,11 +127,23 @@ export default class ContactsList extends Component {
 
   async componentDidMount() {
     const uid = await getAsyncData('uuid');
-    this.setState({
+    const contact = this.setState({
       uid: uid,
     });
+
+    fetch('https://sb.thecityresort.com/api/get-contact?uid=' + uid)
+      .then(res => res.json())
+      .then(result => {
+        this.setState({
+          isLoaded: true,
+          contacts: result,
+        });
+      });
   }
+
   onPress(uid, uid2, title) {
+    let prefix = '';
+    const idPrefix = uuid.v4();
     fetch('https://sb.thecityresort.com/api/insert-chat-list', {
       method: 'POST',
       headers: {
@@ -137,14 +153,19 @@ export default class ContactsList extends Component {
       body: JSON.stringify({
         uid: uid,
         uid2: uid2,
-        id: uuid.v4(),
+        id: idPrefix,
       }),
     })
       .then(response => response.json())
       .then(responseJson => {
         console.log(responseJson);
+        if (responseJson.length > 0) {
+          prefix = responseJson[0].id;
+        } else {
+          prefix = idPrefix;
+        }
         this.props.navigation.push('ChatScreen', {
-          prefix: uuid.v4(),
+          prefix: prefix,
           title: title,
         });
       });
