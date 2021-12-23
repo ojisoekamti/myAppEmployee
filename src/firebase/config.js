@@ -11,14 +11,14 @@ class config {
   init = () => {
     if (!firebase.getApp.length) {
       firebase.initializeApp({
-        apiKey: 'AIzaSyCUTVZo9oXgKP9q2bdyPxhoLwiqPfIi_qY',
-        authDomain: 'thecityresort-app.firebaseapp.com',
-        databaseURL: 'https://thecityresort-app-default-rtdb.firebaseio.com',
-        projectId: 'thecityresort-app',
-        storageBucket: 'thecityresort-app.appspot.com',
-        messagingSenderId: '873602037019',
-        appId: '1:873602037019:web:4e43f0a9e9bb3ced708fbe',
-        measurementId: 'G-BDZ65PYFZ7',
+        apiKey: 'AIzaSyAbLw6oeygZegw5OFzh_q1UAvItuQTpiGk',
+        authDomain: 'employeeapps-e9492.firebaseapp.com',
+        databaseURL: 'https://employeeapps-e9492-default-rtdb.firebaseio.com',
+        projectId: 'employeeapps-e9492',
+        storageBucket: 'employeeapps-e9492.appspot.com',
+        messagingSenderId: '515427023581',
+        appId: '1:515427023581:web:6870b07faf77aacfc3b934',
+        measurementId: 'G-WD5YPTDD51',
       });
     }
   };

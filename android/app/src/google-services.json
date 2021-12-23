@@ -1,34 +1,50 @@
 {
   "project_info": {
-    "project_number": "873602037019",
-    "project_id": "thecityresort-app",
-    "storage_bucket": "thecityresort-app.appspot.com"
+    "project_number": "515427023581",
+    "firebase_url": "https://employeeapps-e9492-default-rtdb.firebaseio.com",
+    "project_id": "employeeapps-e9492",
+    "storage_bucket": "employeeapps-e9492.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:873602037019:android:2acdd731e178c305708fbe",
+        "mobilesdk_app_id": "1:515427023581:android:5150423a9e3b9330c3b934",
         "android_client_info": {
           "package_name": "com.employeeapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "873602037019-o2mr1s01ctv1k97ot0o6fmtr56e08ijg.apps.googleusercontent.com",
+          "client_id": "515427023581-bince8di016i1i1i36tneeqvchsl7ucm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.employeeapp",
+            "certificate_hash": "b6b215f02df399fb35dd2fc3ef4181dd6af1e109"
+          }
+        },
+        {
+          "client_id": "515427023581-oa1rgbbvmscoq2qiutssdkahn4up4a2r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCZVcNhnuACkx6VA82bzOeuqwoaF68JCKo"
+          "current_key": "AIzaSyCrmPLPg4p5W5EZoz-sjSDcTe-dSzG_NOg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "873602037019-o2mr1s01ctv1k97ot0o6fmtr56e08ijg.apps.googleusercontent.com",
+              "client_id": "515427023581-oa1rgbbvmscoq2qiutssdkahn4up4a2r.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "515427023581-q7nor7gochjjf0oo668oum4nmquo16dh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.employeeapp"
+              }
             }
           ]
         }

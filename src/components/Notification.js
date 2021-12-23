@@ -16,7 +16,7 @@ class Notification {
         // process the notification
 
         // (required) Called when a remote is received or opened, or local notification is opened
-        notification.finish(PushNotificationIOS.FetchResult.NoData);
+        //notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
 
       // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
@@ -88,4 +88,4 @@ class Notification {
   };
 }
 
-export default Notification;
+export const notification = new Notification();

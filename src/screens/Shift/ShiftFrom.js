@@ -36,8 +36,6 @@ const ShiftFrom = ({navigation, route}) => {
   const [items, setItems] = useState([]);
   const [shift, setShift] = useState('');
   const [minDatePicker, setMinDatePicker] = useState('');
-  const [idForm, setIdForm] = useState('');
-  const [idPemohon, setIdPemohon] = useState(false);
   const [shiftData, setShiftData] = useState([]);
   const [editableForm, setEditableForm] = useState(false);
   const [editableDate, setEditableDate] = useState(true);
@@ -45,11 +43,6 @@ const ShiftFrom = ({navigation, route}) => {
   useEffect(() => {
     setIsLoading(true);
     getUserData();
-    console.log(route.params);
-    if (route.params.idForm != '') {
-      setIdForm(route.params.idForm);
-      setIdPemohon(route.params.idPemohon);
-    }
     setIsLoading(true);
   }, []);
 
@@ -74,6 +67,7 @@ const ShiftFrom = ({navigation, route}) => {
     const uname = await getAsyncData('uname');
     // console.log(uid);
     if (uid != null) {
+      console.log('Route Params', route.params.new);
       var url =
         'https://sb.thecityresort.com/api/get-user-delegate?uid=' +
         uid +
@@ -100,7 +94,7 @@ const ShiftFrom = ({navigation, route}) => {
       setUserId(uid);
       setUserName(uname);
       setMinDatePicker(new Date(moment(new Date()).add(2, 'days')));
-      editableSet(userId, userName, shiftData);
+      editableSet(userId, userName, shiftData, route);
       setTukarShiftData(uid);
     }
 
@@ -109,24 +103,65 @@ const ShiftFrom = ({navigation, route}) => {
 
   const setTukarShiftData = uidSet => {
     setIsLoading(true);
-    var url = 'https://sb.thecityresort.com/api/user-shift?uid=' + uidSet;
-    // var formdata = new FormData();
-    var requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-    };
+    if (route.params.new == false) {
+      var url = 'https://sb.thecityresort.com/api/user-shift?uid=' + uidSet;
+      // var formdata = new FormData();
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
 
-    fetch(url, requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        result = JSON.parse(result);
-        console.log(result);
-        if (result.id > 0) {
-          setShiftData(result);
-        } else {
-        }
-      })
-      .catch(error => {});
+      fetch(url, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          result = JSON.parse(result);
+          console.log(result);
+          if (result.id > 0) {
+            setShiftData(result);
+          } else {
+          }
+        })
+        .catch(error => {});
+    } else {
+      var url = 'https://sb.thecityresort.com/api/user-shift?uid=' + uidSet;
+      // var formdata = new FormData();
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
+
+      fetch(url, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          result = JSON.parse(result);
+          if (result.id > 0) {
+            console.log(result);
+            if (result.jumlah >= 3) {
+              Alert.alert(
+                'Information',
+                'Mohon maaf tidak bisa request tukar shift',
+                [
+                  {
+                    text: 'Cancel',
+                    onPress: () => {
+                      navigation.navigate('Home');
+                    },
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'YES',
+                    onPress: () => {
+                      navigation.navigate('Home');
+                    },
+                  },
+                ],
+              );
+            }
+          } else {
+          }
+        })
+        .catch(error => {});
+    }
     setIsLoading(false);
   };
 
@@ -162,7 +197,7 @@ const ShiftFrom = ({navigation, route}) => {
     hideDatePickerTo();
   };
 
-  const editableSet = (userId, userName, shiftData) => {
+  const editableSet = (userId, userName, shiftData, route) => {
     setIsLoading(true);
     var userName = userName.replace(/[^\w\s]/gi, '');
     if (shiftData.pemohon == userName) {
@@ -190,7 +225,7 @@ const ShiftFrom = ({navigation, route}) => {
       shift: shift,
       dateTo: dateTo,
       shiftDataId: shiftId,
-      idPemohon: idPemohon,
+      idPemohon: route.params.idPemohon,
     };
     console.log(data);
     if (shiftId == null) {
@@ -216,7 +251,7 @@ const ShiftFrom = ({navigation, route}) => {
     formdata.append('shift', shift);
     formdata.append('dateTo', dateTo);
     formdata.append('id', shiftId);
-    formdata.append('id_pemohon', idPemohon);
+    formdata.append('id_pemohon', route.params.idPemohon);
 
     var requestOptions = {
       method: 'POST',

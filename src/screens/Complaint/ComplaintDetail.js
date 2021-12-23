@@ -360,7 +360,7 @@ const ComplaintDetail = ({route, navigation}) => {
           <TouchableOpacity
             onPress={chooseFileResult}
             disabled={
-              route.params.realisasi != null
+              route.params.result != null
                 ? true
                 : route.params.user_id != null
                 ? true

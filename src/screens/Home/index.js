@@ -25,8 +25,13 @@ import Swiper from 'react-native-swiper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
+import {notification} from '../../components/Notification';
 export function Example({navigation}) {
+  const onPress = () => {
+    notification.configure();
+    notification.createChannel('1');
+    notification.sendNotification('1', 'Title', 'Description');
+  };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.sliderContainer}>
@@ -77,10 +82,15 @@ export function Example({navigation}) {
             );
           }}>
           <Menu.Item
-            onPress={() => navigation.navigate('ShiftFrom', {idForm: ''})}>
+            onPress={() => navigation.navigate('ShiftFrom', {new: true})}>
             Tukar Shift Request
           </Menu.Item>
-          <Menu.Item onPress={() => navigation.navigate('TukarShift')}>
+          <Menu.Item
+            onPress={() => navigation.navigate('TukarShift', {lists: true})}>
+            Tukar Shift Info
+          </Menu.Item>
+          <Menu.Item
+            onPress={() => navigation.navigate('TukarShift', {lists: false})}>
             List Approval
           </Menu.Item>
         </Menu>

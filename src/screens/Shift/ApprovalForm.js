@@ -41,6 +41,7 @@ const ApprovalForm = ({navigation, route}) => {
     formdata.append('id', itemData.id);
     formdata.append('uid', userId);
     formdata.append('approve', value);
+    formdata.append('description', description);
 
     var requestOptions = {
       method: 'POST',

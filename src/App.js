@@ -1,80 +1,118 @@
-import React, {useEffect} from 'react';
-import {
-  NativeBaseProvider,
-  Box,
-  Center,
-  useColorMode,
-  View,
-  Text,
-  Button,
-  StatusBar,
-  HStack,
-  IconButton,
-  VStack,
-  Icon,
-} from 'native-base';
-import SplashScreen from 'react-native-splash-screen';
+import React, {Component} from 'react';
+import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Routes from './routes';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import PushNotification from 'react-native-push-notification';
+import Firebase from '@react-native-firebase/app';
+import NotifService from './services/NotifService';
 
-export const HomeScreen = ({navigation}) => {
-  
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Home Screen</Text>
-      <Button
-        colorScheme="success"
-        onPress={() => navigation.navigate('Details')}>
-        Go to details
-      </Button>
-    </View>
-  );
-};
-export const DetailsScreen = () => {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Details Screen</Text>
-    </View>
-  );
-};
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
 
+    this.notif = new NotifService(
+      this.onRegister.bind(this),
+      this.onNotif.bind(this),
+    );
+  }
 
-export const Example = () => {
-  
-  return (
-    <>
-      <Box
-        bg="amber.500"
-        p="3"
-        _text={{
-          fontSize: 'md',
-          fontWeight: 'medium',
-          color: 'warmGray.50',
-          letterSpacing: 'lg',
-        }}>
-        This is a Box
-      </Box>
-    </>
-  );
-};
+  componentDidMount() {
+    const firebaseConfig = {
+      apiKey: 'AIzaSyAbLw6oeygZegw5OFzh_q1UAvItuQTpiGk',
+      authDomain: 'employeeapps-e9492.firebaseapp.com',
+      databaseURL: 'https://employeeapps-e9492-default-rtdb.firebaseio.com',
+      projectId: 'employeeapps-e9492',
+      storageBucket: 'employeeapps-e9492.appspot.com',
+      messagingSenderId: '515427023581',
+      appId: '1:515427023581:web:6870b07faf77aacfc3b934',
+      measurementId: 'G-WD5YPTDD51',
+    };
+    if (!Firebase.apps.length) {
+      Firebase.initializeApp(firebaseConfig);
+    } else {
+      Firebase.app();
+    }
+    const apps = Firebase.apps;
 
-export default function App() {
-  const {colorMode, toggleColorMode} = useColorMode();
-  const Stack = createNativeStackNavigator();
+    apps.forEach(app => {
+      console.log('App name: ', app.name);
+    });
 
-  // console.log(colorMode);
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
-  return (
-    <>
-      <NativeBaseProvider>
-        <NavigationContainer>
-          <Routes />
-        </NavigationContainer>
-      </NativeBaseProvider>
-    </>
-  );
+    console.log(Firebase.app());
+    PushNotification.configure({
+      // (optional) Called when Token is generated (iOS and Android)
+      onRegister: function (token) {
+        console.log('TOKEN:', token);
+      },
+
+      // (required) Called when a remote is received or opened, or local notification is opened
+      onNotification: function (notification) {
+        console.log('NOTIFICATION:', notification);
+
+        // process the notification
+
+        // (required) Called when a remote is received or opened, or local notification is opened
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      },
+
+      // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
+      onAction: function (notification) {
+        console.log('ACTION:', notification.action);
+        console.log('NOTIFICATION:', notification);
+
+        // process the action
+      },
+
+      // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+      onRegistrationError: function (err) {
+        console.error(err.message, err);
+      },
+
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+
+      // Should the initial notification be popped automatically
+      // default: true
+      popInitialNotification: true,
+
+      /**
+       * (optional) default: true
+       * - Specified if permissions (ios) and token (android and ios) will requested or not,
+       * - if not, you must call PushNotificationsHandler.requestPermissions() later
+       * - if you are not using remote notification or do not have Firebase installed, use this:
+       *     requestPermissions: Platform.OS === 'ios'
+       */
+      requestPermissions: true,
+    });
+  }
+
+  render() {
+    return (
+      <>
+        <NativeBaseProvider>
+          <NavigationContainer>
+            <Routes />
+          </NavigationContainer>
+        </NativeBaseProvider>
+      </>
+    );
+  }
+
+  onRegister(token) {
+    this.setState({registerToken: token.token, fcmRegistered: true});
+  }
+
+  onNotif(notif) {
+    Alert.alert(notif.title, notif.message);
+  }
+
+  handlePerm(perms) {
+    Alert.alert('Permissions', JSON.stringify(perms));
+  }
 }

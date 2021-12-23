@@ -10,7 +10,7 @@ import {
 import {Heading, Stack, Center, VStack, ImageButton} from 'native-base';
 import {getAsyncData} from '../../asyncStorage';
 import moment from 'moment';
-
+import {notification} from '../../components/Notification';
 const Complaint = ({navigation}) => {
   const [data, setData] = useState([]);
   // let data = [];
@@ -44,10 +44,15 @@ const Complaint = ({navigation}) => {
 
       return () => {};
     };
-
+    onPress();
     getUserData();
   }, []);
 
+  const onPress = () => {
+    notification.configure();
+    notification.createChannel('1');
+    notification.sendNotification('1', 'Title', 'Description');
+  };
   return (
     <View style={{backgroundColor: '#fff', flex: 1, alignItems: 'center'}}>
       {/* <Text>No Data Available</Text> */}

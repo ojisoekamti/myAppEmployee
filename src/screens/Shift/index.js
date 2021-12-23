@@ -32,12 +32,16 @@ export function ShiftSchedDetail({shiftId}) {
   return null;
 }
 
-export function ApprovalDetail({approval, dataApproval, navigation}) {
+export function ApprovalDetail({approval, dataApproval, navigation, route}) {
   return (
     <>
       {approval ? (
         <View style={{alignItems: 'center', backgroundColor: '#fff'}}>
-          <Heading size="sm">Tukar Shift List Approval</Heading>
+          <Heading size="sm">
+            {route.params.lists
+              ? 'Tukar Shift List'
+              : 'Tukar Shift List Approval'}
+          </Heading>
         </View>
       ) : (
         <></>
@@ -50,7 +54,8 @@ export function ApprovalDetail({approval, dataApproval, navigation}) {
               style={(styles.card, {backgroundColor: '#fff'})}
               onPress={() => {
                 navigation.navigate('ApprovalForm', {item: item});
-              }}>
+              }}
+              disabled={route.params.lists ? true : false}>
               <View style={styles.cardInfo}>
                 <Text style={styles.cardTitle}>Approval</Text>
                 <Text style={styles.cardDetails}>
@@ -64,6 +69,8 @@ export function ApprovalDetail({approval, dataApproval, navigation}) {
                   {'\n'}
                   Shift : <ShiftSchedDetail shiftId={item.shift_sched} />
                   {'\n'}
+                  Next Approver : {item.next_approver}
+                  {'\n'}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -76,7 +83,7 @@ export function ApprovalDetail({approval, dataApproval, navigation}) {
   );
 }
 
-const TukarShift = ({navigation}) => {
+const TukarShift = ({navigation, route}) => {
   const [disabled, setDisabled] = useState('');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
@@ -99,8 +106,8 @@ const TukarShift = ({navigation}) => {
       setIsLoading(true);
       const uid = await getAsyncData('uuid');
       setUid(uid);
-      setApprovalData(uid);
-      setTukarShiftData(uid);
+      setApprovalData(uid, route);
+      //setTukarShiftData(uid);
       setIsLoading(false);
     };
 
@@ -157,10 +164,13 @@ const TukarShift = ({navigation}) => {
       });
   };
 
-  const setApprovalData = uidSet => {
+  const setApprovalData = (uidSet, route) => {
     var uri =
       'https://sb.thecityresort.com/api/approve-shift-info?uid=' + uidSet;
 
+    if (route.params.lists) {
+      uri = 'https://sb.thecityresort.com/api/list-shift-info?uid=' + uidSet;
+    }
     var request = {
       method: 'GET',
       redirect: 'follow',
@@ -171,6 +181,7 @@ const TukarShift = ({navigation}) => {
       .then(results => {
         let result = [];
         results = JSON.parse(results);
+        console.log(result);
         if (results.length > 0) {
           setDataApproval(results);
           setApproval(true);
@@ -203,6 +214,7 @@ const TukarShift = ({navigation}) => {
               idShift={idShift}
               dataApproval={dataApproval}
               navigation={navigation}
+              route={route}
             />
           </ScrollView>
         </>

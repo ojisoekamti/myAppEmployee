@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "873602037019",
+    "project_id": "thecityresort-app",
+    "storage_bucket": "thecityresort-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873602037019:android:2acdd731e178c305708fbe",
+        "android_client_info": {
+          "package_name": "com.employeeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "873602037019-o2mr1s01ctv1k97ot0o6fmtr56e08ijg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZVcNhnuACkx6VA82bzOeuqwoaF68JCKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "873602037019-o2mr1s01ctv1k97ot0o6fmtr56e08ijg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
