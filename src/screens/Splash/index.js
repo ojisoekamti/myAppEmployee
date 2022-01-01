@@ -1,13 +1,16 @@
 import {Center, NativeBaseProvider, Text} from 'native-base';
-import React, {useEffect} from 'react';
+import {convertAbsoluteToRem} from 'native-base/lib/typescript/theme/tools';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {getAsyncData, deleteAsyncData} from '../../asyncStorage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Splash = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
       const getUserData = async () => {
         const userData = await getAsyncData('uuid');
-        console.log(userData);
+        // console.log('Route', token);
+        // console.log('userData', userData);
         if (userData) {
           navigation.replace('MainApp');
         } else {
@@ -17,6 +20,7 @@ const Splash = ({navigation}) => {
       getUserData();
     }, 3000);
   }, [navigation]);
+
   return (
     <NativeBaseProvider>
       <Center flex={1} bg="amber.400">

@@ -126,7 +126,8 @@ const Otp = ({route, navigation}) => {
       OTP += digits[Math.floor(Math.random() * 10)];
     }
     otpVar = OTP;
-    console.log(otpVar);
+    // console.log(otpVar);
+    // return;
     var formdata = new FormData();
     formdata.append('phone_number', phone);
     formdata.append('otp', otpVar);

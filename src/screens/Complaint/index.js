@@ -49,9 +49,9 @@ const Complaint = ({navigation}) => {
   }, []);
 
   const onPress = () => {
-    notification.configure();
-    notification.createChannel('1');
-    notification.sendNotification('1', 'Title', 'Description');
+    // notification.configure();
+    // notification.createChannel('1');
+    // notification.sendNotification('1', 'Title', 'Description');
   };
   return (
     <View style={{backgroundColor: '#fff', flex: 1, alignItems: 'center'}}>

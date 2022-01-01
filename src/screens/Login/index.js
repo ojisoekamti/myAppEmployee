@@ -13,8 +13,9 @@ import {
   Icon,
   View,
 } from 'native-base';
-import {setAsyncData, deleteAsyncData} from '../../asyncStorage';
+import {setAsyncData, deleteAsyncData, getAsyncData} from '../../asyncStorage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -22,7 +23,10 @@ const Login = ({navigation}) => {
   const [phone, setPhone] = useState('');
   const [show, setShow] = React.useState(false);
   const [isLoading, setIsLoading] = useState('');
+  const [tokenId, setTokenId] = useState();
+
   useEffect(() => {
+    getData();
     deleteAsyncData();
     const backAction = () => {
       Alert.alert('Hold on!', 'Are you sure you want to exit ?', [
@@ -49,9 +53,23 @@ const Login = ({navigation}) => {
 
     return () => backHandler.remove();
   }, []);
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      // console.log('test', value);
+      if (value !== null) {
+        // value previously stored
+        setTokenId(value);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
   const proses = () => {
     console.log(email);
     console.log(password);
+    console.log(tokenId);
     setIsLoading(true);
     fetch('https://sb.thecityresort.com/api/user-login', {
       method: 'POST',
@@ -62,6 +80,7 @@ const Login = ({navigation}) => {
       body: JSON.stringify({
         email: email,
         password: password,
+        tokenId: tokenId,
       }),
     })
       .then(response => response.json())
@@ -74,6 +93,7 @@ const Login = ({navigation}) => {
           setAsyncData('uphone', responseJson.data.phone_number);
           setAsyncData('uavatar', responseJson.data.avatar);
           setAsyncData('urole', responseJson.data.role_id);
+          setAsyncData('token', responseJson.data.mobile_token);
           setIsLoading(false);
           navigation.push('Otp', {
             phone: responseJson.data.phone_number,

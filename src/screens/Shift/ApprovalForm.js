@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, TouchableOpacity, Keyboard, Alert} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Keyboard,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import {
   Text,
   View,
@@ -21,6 +27,7 @@ const ApprovalForm = ({navigation, route}) => {
   const [date, setDate] = useState('');
   const [name, setName] = useState('');
   const [userId, setUserId] = useState('');
+  const [isLoading, setIsLoading] = useState('');
   useEffect(() => {
     getUserData();
     setItemData(route.params.item);
@@ -36,6 +43,7 @@ const ApprovalForm = ({navigation, route}) => {
 
   const onSubmit = value => {
     console.log(value);
+    setIsLoading(true);
 
     var formdata = new FormData();
     formdata.append('id', itemData.id);
@@ -57,6 +65,7 @@ const ApprovalForm = ({navigation, route}) => {
       .then(result => {
         console.log(result);
         navigation.navigate('MainApp');
+        setIsLoading(false);
       })
       .catch(error => {
         Alert.alert('Data Tidak sesuai');
@@ -105,6 +114,32 @@ const ApprovalForm = ({navigation, route}) => {
           </Center>
         </TouchableOpacity>
       </View>
+      {isLoading ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            padding: 10,
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#e4ff0000',
+          }}>
+          {isLoading ? (
+            <ActivityIndicator color={'#fbbf24'} size="large" />
+          ) : (
+            <View></View>
+          )}
+        </View>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

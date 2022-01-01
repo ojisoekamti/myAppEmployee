@@ -10,7 +10,7 @@ import NotifService from './services/NotifService';
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {tokenId: null};
 
     this.notif = new NotifService(
       this.onRegister.bind(this),
@@ -36,20 +36,17 @@ export default class App extends Component {
     }
     const apps = Firebase.apps;
 
-    apps.forEach(app => {
-      console.log('App name: ', app.name);
-    });
-
-    console.log(Firebase.app());
     PushNotification.configure({
       // (optional) Called when Token is generated (iOS and Android)
-      onRegister: function (token) {
-        console.log('TOKEN:', token);
-      },
+      // onRegister: function (token) {
+      //   console.log('TOKEN:', token);
+      // },
+
+      onRegister: token => this.setState({tokenId: token.token}),
 
       // (required) Called when a remote is received or opened, or local notification is opened
       onNotification: function (notification) {
-        console.log('NOTIFICATION:', notification);
+        console.log('NOTIFICATION home:', notification);
 
         // process the notification
 
@@ -59,8 +56,8 @@ export default class App extends Component {
 
       // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
       onAction: function (notification) {
-        console.log('ACTION:', notification.action);
-        console.log('NOTIFICATION:', notification);
+        console.log('ACTION home:', notification.action);
+        console.log('NOTIFICATION home:', notification);
 
         // process the action
       },
@@ -97,7 +94,7 @@ export default class App extends Component {
       <>
         <NativeBaseProvider>
           <NavigationContainer>
-            <Routes />
+            <Routes token={this.state.tokenId} />
           </NavigationContainer>
         </NativeBaseProvider>
       </>

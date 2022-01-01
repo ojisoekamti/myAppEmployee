@@ -1,5 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -19,6 +19,8 @@ import EditProfileScreen from '../screens/Profile/EditProfileScreen';
 import ShiftFrom from '../screens/Shift/ShiftFrom';
 import ApprovalForm from '../screens/Shift/ApprovalForm';
 import ContactListScreen from '../screens/Chat/ContactListScreen';
+//import {setAsyncData} from '../asyncStorage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -77,7 +79,73 @@ const MainApp = () => {
     </Tab.Navigator>
   );
 };
-const Routes = () => {
+const Routes = ({token}) => {
+  //console.log('TOKEN route', token)
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      // console.log('test', value);
+      if (value !== null) {
+        // value previously stored
+        setTokenId(value);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  const setAsyncData = async (key, item) => {
+    try {
+      await AsyncStorage.setItem(key, item);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const mobile_token = getData();
+  if (mobile_token) {
+    setAsyncData('token', token);
+  } else if (mobile_token != token) {
+    Alert.alert('Hold on!', 'Are you sure you want to exit ?', [
+      {
+        text: '',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      {
+        text: 'YES',
+        onPress: () => {
+          deleteAsyncData();
+          BackHandler.exitApp();
+        },
+      },
+    ]);
+    // const backAction = () => {
+    //   Alert.alert('Hold on!', 'Are you sure you want to exit ?', [
+    //     {
+    //       text: 'Cancel',
+    //       onPress: () => null,
+    //       style: 'cancel',
+    //     },
+    //     {
+    //       text: 'YES',
+    //       onPress: () => {
+    //         deleteAsyncData();
+    //         BackHandler.exitApp();
+    //       },
+    //     },
+    //   ]);
+    //   return true;
+    // };
+
+    // const backHandler = BackHandler.addEventListener(
+    //   'hardwareBackPress',
+    //   backAction,
+    // );
+
+    // return () => backHandler.remove();
+  }
+
   return (
     <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen
@@ -89,14 +157,18 @@ const Routes = () => {
         name="Splash"
         component={Splash}
         options={{headerShown: false}}
+        token={token}
       />
       <Stack.Screen
         name="Login"
         component={Login}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="ContactListScreen" component={ContactListScreen}
-        options={{title: 'Contact List'}} />
+      <Stack.Screen
+        name="ContactListScreen"
+        component={ContactListScreen}
+        options={{title: 'Contact List'}}
+      />
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="Otp" component={otp} options={{headerShown: false}} />
       <Stack.Screen name="Complaint" component={Complaint} />
