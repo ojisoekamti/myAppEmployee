@@ -58,7 +58,7 @@ const ApprovalForm = ({navigation, route}) => {
     };
 
     fetch(
-      'https://sb.thecityresort.com/api/approve-tukar-shift',
+      'https://thecityresort.com/api/approve-tukar-shift',
       requestOptions,
     )
       .then(response => response.text())

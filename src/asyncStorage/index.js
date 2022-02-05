@@ -32,3 +32,12 @@ export const deleteAsyncData = async () => {
     console.log(error);
   }
 };
+
+export const removeItemValue = async key => {
+  try {
+    await AsyncStorage.removeItem(key);
+    return true;
+  } catch (exception) {
+    return false;
+  }
+};

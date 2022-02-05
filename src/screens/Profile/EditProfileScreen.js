@@ -37,7 +37,7 @@ const EditProfileScreen = ({navigation}) => {
       redirect: 'follow',
     };
 
-    fetch('https://sb.thecityresort.com/api/update-user', requestOptions)
+    fetch('https://thecityresort.com/api/update-user', requestOptions)
       .then(response => response.text())
       .then(result => {
         console.log(result);

@@ -18,7 +18,7 @@ const Complaint = ({navigation}) => {
     const getUserData = async () => {
       const uid = await getAsyncData('uuid');
       console.log(uid);
-      var url = 'https://sb.thecityresort.com/api/user-tickets?uid=' + uid;
+      var url = 'https://thecityresort.com/api/user-tickets?uid=' + uid;
       // console.log(url);
       var formdata = new FormData();
 

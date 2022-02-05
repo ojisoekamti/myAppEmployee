@@ -61,10 +61,7 @@ const FirstRoute = () => {
         return;
       }
       var url =
-        'https://sb.thecityresort.com/api/user-role?uid=' +
-        uid +
-        '&role=' +
-        urole;
+        'https://thecityresort.com/api/user-role?uid=' + uid + '&role=' + urole;
       console.log(url);
       var formdata = new FormData();
 
@@ -88,7 +85,7 @@ const FirstRoute = () => {
                 timeStamp: '12:47 PM',
                 // recentText: 'Good Day!',
                 avatarUrl:
-                  'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
+                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
               },
               {
                 id: 'bd7acbeb-c1b1-46c2-aed5-3ad53abb28ba',
@@ -97,7 +94,7 @@ const FirstRoute = () => {
                 timeStamp: '12:47 PM',
                 // recentText: 'Good Day!',
                 avatarUrl:
-                  'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
+                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
               },
               {
                 id: 'bd7acbeb-c1b1-46c2-aed5-2ad53abb28ba',
@@ -106,7 +103,7 @@ const FirstRoute = () => {
                 timeStamp: '12:47 PM',
                 // recentText: 'Good Day!',
                 avatarUrl:
-                  'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
+                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
               },
             );
           } else if (result[0].lev2 > 0) {
@@ -118,7 +115,7 @@ const FirstRoute = () => {
                 timeStamp: '12:47 PM',
                 // recentText: 'Good Day!',
                 avatarUrl:
-                  'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
+                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
               },
               {
                 id: 'bd7acbeb-c1b1-46c2-aed5-2ad53abb28ba',
@@ -127,7 +124,7 @@ const FirstRoute = () => {
                 timeStamp: '12:47 PM',
                 // recentText: 'Good Day!',
                 avatarUrl:
-                  'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
+                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
               },
             );
           } else {
@@ -138,7 +135,7 @@ const FirstRoute = () => {
               timeStamp: '12:47 PM',
               // recentText: 'Good Day!',
               avatarUrl:
-                'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
+                'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
             });
           }
           setListData(data);
@@ -147,7 +144,7 @@ const FirstRoute = () => {
         .catch(error => console.log('error', error));
 
       const url2 =
-        'https://sb.thecityresort.com/api/user-role-additional?uid=' + uid;
+        'https://thecityresort.com/api/user-role-additional?uid=' + uid;
       fetch(url2, requestOptions)
         .then(response => response.text())
         .then(result => {
@@ -173,7 +170,7 @@ const FirstRoute = () => {
                 timeStamp: '12:47 PM',
                 // recentText: 'Good Day!',
                 avatarUrl:
-                  'https://sb.thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
+                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
               });
             }
           }
@@ -323,7 +320,8 @@ const SecondRoute = () => {
       if (data.length > 0) {
         return;
       }
-      const url3 = 'https://sb.thecityresort.com/api/chat-list?uid=' + uid;
+      setUserId(uid);
+      const url3 = 'https://thecityresort.com/api/chat-list?uid=' + uid;
       fetch(url3, requestOptions)
         .then(response => response.text())
         .then(result => {
@@ -337,9 +335,10 @@ const SecondRoute = () => {
               fullName: result[i].name,
               prefix: result[i].chat_id,
               timeStamp: '12:47 PM',
+              mobile_token: result[i].mobile_token,
               // recentText: 'Good Day!',
               avatarUrl:
-                'https://sb.thecityresort.com/storage/' + result[i].avatar,
+                'https://thecityresort.com/storage/' + result[i].avatar,
             });
           }
           setListData(data);
@@ -363,6 +362,10 @@ const SecondRoute = () => {
           navigation.navigate('ChatScreen', {
             prefix: item.prefix,
             title: item.fullName,
+            mobile_token: item.mobile_token,
+            fullName: item.fullName,
+            uid: userId,
+            private: true,
           })
         }
         bg="white">

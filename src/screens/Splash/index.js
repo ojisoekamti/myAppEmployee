@@ -4,18 +4,18 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {getAsyncData, deleteAsyncData} from '../../asyncStorage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const Splash = ({navigation}) => {
+const Splash = ({navigation, route}) => {
   useEffect(() => {
     setTimeout(() => {
       const getUserData = async () => {
         const userData = await getAsyncData('uuid');
-        // console.log('Route', token);
+        //console.log('Route', route.params.token);
         // console.log('userData', userData);
         if (userData) {
           navigation.replace('MainApp');
-        } else {
+        } else if (!userData) {
           navigation.replace('Login');
-        }
+        } 
       };
       getUserData();
     }, 3000);

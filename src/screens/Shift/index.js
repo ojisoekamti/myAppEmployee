@@ -115,7 +115,7 @@ const TukarShift = ({navigation, route}) => {
   }, [setIsLoading]);
 
   const setTukarShiftData = uidSet => {
-    var url = 'https://sb.thecityresort.com/api/user-shift?uid=' + uidSet;
+    var url = 'https://thecityresort.com/api/user-shift?uid=' + uidSet;
     // var formdata = new FormData();
     var requestOptions = {
       method: 'GET',
@@ -166,10 +166,10 @@ const TukarShift = ({navigation, route}) => {
 
   const setApprovalData = (uidSet, route) => {
     var uri =
-      'https://sb.thecityresort.com/api/approve-shift-info?uid=' + uidSet;
+      'https://thecityresort.com/api/approve-shift-info?uid=' + uidSet;
 
     if (route.params.lists) {
-      uri = 'https://sb.thecityresort.com/api/list-shift-info?uid=' + uidSet;
+      uri = 'https://thecityresort.com/api/list-shift-info?uid=' + uidSet;
     }
     var request = {
       method: 'GET',

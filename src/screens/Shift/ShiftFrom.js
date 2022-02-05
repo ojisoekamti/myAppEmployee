@@ -69,7 +69,7 @@ const ShiftFrom = ({navigation, route}) => {
     if (uid != null) {
       console.log('Route Params', route.params.new);
       var url =
-        'https://sb.thecityresort.com/api/get-user-delegate?uid=' +
+        'https://thecityresort.com/api/get-user-delegate?uid=' +
         uid +
         '&role=' +
         urole;
@@ -104,7 +104,7 @@ const ShiftFrom = ({navigation, route}) => {
   const setTukarShiftData = uidSet => {
     setIsLoading(true);
     if (route.params.new == false) {
-      var url = 'https://sb.thecityresort.com/api/user-shift?uid=' + uidSet;
+      var url = 'https://thecityresort.com/api/user-shift?uid=' + uidSet;
       // var formdata = new FormData();
       var requestOptions = {
         method: 'GET',
@@ -123,7 +123,7 @@ const ShiftFrom = ({navigation, route}) => {
         })
         .catch(error => {});
     } else {
-      var url = 'https://sb.thecityresort.com/api/user-shift?uid=' + uidSet;
+      var url = 'https://thecityresort.com/api/user-shift?uid=' + uidSet;
       // var formdata = new FormData();
       var requestOptions = {
         method: 'GET',
@@ -259,10 +259,10 @@ const ShiftFrom = ({navigation, route}) => {
       redirect: 'follow',
     };
 
-    fetch('https://sb.thecityresort.com/api/tukar-shift', requestOptions)
+    fetch('https://thecityresort.com/api/tukar-shift', requestOptions)
       .then(response => response.text())
       .then(result => {
-        console.log(result);
+        //console.log(result);
         navigation.navigate('MainApp');
       })
       .catch(error => {

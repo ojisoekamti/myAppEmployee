@@ -71,7 +71,7 @@ const chooseFile = (...props) => {
         redirect: 'follow',
       };
 
-      fetch('https://sb.thecityresort.com/api/upload', requestOptions)
+      fetch('https://thecityresort.com/api/upload', requestOptions)
         .then(response => response.text())
         .then(result => {
           let results = JSON.parse(result);
@@ -80,7 +80,7 @@ const chooseFile = (...props) => {
 
           let messages = {
             _id: uuid.v4(),
-            image: 'https://sb.thecityresort.com/storage/files/' + results.file,
+            image: 'https://thecityresort.com/storage/files/' + results.file,
             createdAt: new Date().getTime(),
             user: props[0].user,
           };
@@ -152,7 +152,7 @@ const choosePhoto = (...props) => {
         redirect: 'follow',
       };
 
-      fetch('https://sb.thecityresort.com/api/upload', requestOptions)
+      fetch('https://thecityresort.com/api/upload', requestOptions)
         .then(response => response.text())
         .then(result => {
           let results = JSON.parse(result);
@@ -161,7 +161,7 @@ const choosePhoto = (...props) => {
 
           let messages = {
             _id: uuid.v4(),
-            image: 'https://sb.thecityresort.com/storage/files/' + results.file,
+            image: 'https://thecityresort.com/storage/files/' + results.file,
             createdAt: new Date().getTime(),
             user: props[0].user,
           };

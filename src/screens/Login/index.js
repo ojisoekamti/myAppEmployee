@@ -71,7 +71,7 @@ const Login = ({navigation}) => {
     console.log(password);
     console.log(tokenId);
     setIsLoading(true);
-    fetch('https://sb.thecityresort.com/api/user-login', {
+    fetch('https://thecityresort.com/api/user-login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

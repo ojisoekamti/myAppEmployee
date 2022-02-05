@@ -126,7 +126,7 @@ const Otp = ({route, navigation}) => {
       OTP += digits[Math.floor(Math.random() * 10)];
     }
     otpVar = OTP;
-    // console.log(otpVar);
+    console.log(otpVar);
     // return;
     var formdata = new FormData();
     formdata.append('phone_number', phone);
@@ -138,7 +138,7 @@ const Otp = ({route, navigation}) => {
       redirect: 'follow',
     };
 
-    fetch('https://sb.thecityresort.com/api/user-otp', requestOptions)
+    fetch('https://thecityresort.com/api/user-otp', requestOptions)
       .then(response => response.text())
       .then(result => {
         console.log(result);

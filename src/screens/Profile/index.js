@@ -41,7 +41,7 @@ const Profile = ({navigation}) => {
         <View style={{flexDirection: 'row', marginTop: 15}}>
           <Avatar.Image
             source={{
-              uri: 'https://sb.thecityresort.com/storage/' + userAvatar,
+              uri: 'https://thecityresort.com/storage/' + userAvatar,
             }}
             size={80}
           />

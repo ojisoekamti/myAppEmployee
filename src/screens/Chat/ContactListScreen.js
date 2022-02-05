@@ -131,7 +131,7 @@ export default class ContactsList extends React.Component {
       uid: uid,
     });
 
-    fetch('https://sb.thecityresort.com/api/get-contact?uid=' + uid)
+    fetch('https://thecityresort.com/api/get-contact?uid=' + uid)
       .then(res => res.json())
       .then(result => {
         this.setState({
@@ -144,7 +144,7 @@ export default class ContactsList extends React.Component {
   onPress(uid, uid2, title) {
     let prefix = '';
     const idPrefix = uuid.v4();
-    fetch('https://sb.thecityresort.com/api/insert-chat-list', {
+    fetch('https://thecityresort.com/api/insert-chat-list', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

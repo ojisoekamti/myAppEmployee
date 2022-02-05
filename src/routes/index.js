@@ -1,5 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -21,6 +21,7 @@ import ApprovalForm from '../screens/Shift/ApprovalForm';
 import ContactListScreen from '../screens/Chat/ContactListScreen';
 //import {setAsyncData} from '../asyncStorage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RequestMenu from '../screens/RequestMenu';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -79,9 +80,8 @@ const MainApp = () => {
     </Tab.Navigator>
   );
 };
-const Routes = ({token}) => {
+const Routes = ({token, notifData}) => {
   //console.log('TOKEN route', token)
-
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('token');
@@ -145,7 +145,10 @@ const Routes = ({token}) => {
 
     // return () => backHandler.remove();
   }
-
+  if (notifData) {
+    setAsyncData('screenNotif', notifData.data.screen);
+  }
+  //screenNoGumi = 'Chat';
   return (
     <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen
@@ -156,8 +159,7 @@ const Routes = ({token}) => {
       <Stack.Screen
         name="Splash"
         component={Splash}
-        options={{headerShown: false}}
-        token={token}
+        options={{headerShown: false, test: 'test'}}
       />
       <Stack.Screen
         name="Login"
@@ -196,6 +198,11 @@ const Routes = ({token}) => {
         name="EditProfileScreen"
         component={EditProfileScreen}
         options={{title: 'Edit Profile'}}
+      />
+      <Stack.Screen
+        name="RequestMenu"
+        component={RequestMenu}
+        options={{title: 'Request Menu'}}
       />
     </Stack.Navigator>
   );

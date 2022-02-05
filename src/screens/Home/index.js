@@ -9,7 +9,7 @@ import {
   Pressable,
   HamburgerIcon,
 } from 'native-base';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -26,7 +26,20 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {notification} from '../../components/Notification';
+import {getAsyncData, removeItemValue} from '../../asyncStorage';
 export function Example({navigation}) {
+  useEffect(() => {
+    const getUserData = async () => {
+      const getScreen = await getAsyncData('screenNotif');
+      if (getScreen) {
+        navigation.navigate(getScreen);
+        removeItemValue('screenNotif');
+      }
+      //console.log('Route', route.params.token);
+      // console.log('userData', userData);
+    };
+    getUserData();
+  }, [navigation]);
   const onPress = () => {
     notification.configure();
     notification.createChannel('1');
@@ -65,7 +78,7 @@ export function Example({navigation}) {
       </View>
 
       <View style={styles.categoryContainer}>
-        <Menu
+        {/* <Menu
           w="190"
           trigger={triggerProps => {
             return (
@@ -77,7 +90,7 @@ export function Example({navigation}) {
                     color="#d97706"
                   />
                 </View>
-                <Text style={styles.categoryBtnTxt}>Tukar Shift </Text>
+                <Text style={styles.categoryBtnTxt}>Request Form </Text>
               </TouchableOpacity>
             );
           }}>
@@ -93,7 +106,20 @@ export function Example({navigation}) {
             onPress={() => navigation.navigate('TukarShift', {lists: false})}>
             List Approval
           </Menu.Item>
-        </Menu>
+        </Menu> */}
+
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => navigation.navigate('RequestMenu')}>
+          <View style={styles.categoryIcon}>
+            <MaterialCommunityIcons
+              name="account-switch-outline"
+              size={35}
+              color="#d97706"
+            />
+          </View>
+          <Text style={styles.categoryBtnTxt}>Request Form </Text>
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.categoryBtn}

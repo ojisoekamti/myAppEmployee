@@ -6,6 +6,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 import Firebase from '@react-native-firebase/app';
 import NotifService from './services/NotifService';
+import {Alert} from 'react-native';
 
 export default class App extends Component {
   constructor(props) {
@@ -45,19 +46,26 @@ export default class App extends Component {
       onRegister: token => this.setState({tokenId: token.token}),
 
       // (required) Called when a remote is received or opened, or local notification is opened
-      onNotification: function (notification) {
-        console.log('NOTIFICATION home:', notification);
 
-        // process the notification
-
-        // (required) Called when a remote is received or opened, or local notification is opened
-        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      onNotification: notification => {
+        const clicked = notification.userInteraction;
+        if (clicked) {
+          this.setState({notifData: notification});
+        }
       },
+
+      // onNotification: function (notification) {
+      //   console.log('NOTIFICATION home:', notification);
+      //   // process the notification
+
+      //   // (required) Called when a remote is received or opened, or local notification is opened
+      //   notification.finish(PushNotificationIOS.FetchResult.NoData);
+      // },
 
       // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
       onAction: function (notification) {
-        console.log('ACTION home:', notification.action);
-        console.log('NOTIFICATION home:', notification);
+        console.log('ACTION Action:', notification.action);
+        console.log('NOTIFICATION Action:', notification);
 
         // process the action
       },
@@ -94,7 +102,10 @@ export default class App extends Component {
       <>
         <NativeBaseProvider>
           <NavigationContainer>
-            <Routes token={this.state.tokenId} />
+            <Routes
+              token={this.state.tokenId}
+              notifData={this.state.notifData}
+            />
           </NavigationContainer>
         </NativeBaseProvider>
       </>

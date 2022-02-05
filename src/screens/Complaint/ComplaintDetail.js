@@ -83,7 +83,7 @@ const ComplaintDetail = ({route, navigation}) => {
           redirect: 'follow',
         };
 
-        fetch('https://sb.thecityresort.com/api/upload', requestOptions)
+        fetch('https://thecityresort.com/api/upload', requestOptions)
           .then(response => response.text())
           .then(result => {
             let results = JSON.parse(result);
@@ -152,7 +152,7 @@ const ComplaintDetail = ({route, navigation}) => {
           redirect: 'follow',
         };
 
-        fetch('https://sb.thecityresort.com/api/upload', requestOptions)
+        fetch('https://thecityresort.com/api/upload', requestOptions)
           .then(response => response.text())
           .then(result => {
             let results = JSON.parse(result);
@@ -217,7 +217,7 @@ const ComplaintDetail = ({route, navigation}) => {
           redirect: 'follow',
         };
 
-        fetch('https://sb.thecityresort.com/api/upload', requestOptions)
+        fetch('https://thecityresort.com/api/upload', requestOptions)
           .then(response => response.text())
           .then(result => {
             let results = JSON.parse(result);
@@ -282,7 +282,7 @@ const ComplaintDetail = ({route, navigation}) => {
           redirect: 'follow',
         };
 
-        fetch('https://sb.thecityresort.com/api/upload', requestOptions)
+        fetch('https://thecityresort.com/api/upload', requestOptions)
           .then(response => response.text())
           .then(result => {
             let results = JSON.parse(result);
@@ -320,7 +320,7 @@ const ComplaintDetail = ({route, navigation}) => {
         source={
           imgSource != null && imgSource != 'null'
             ? {
-                uri: 'https://sb.thecityresort.com/storage/files/' + imgSource,
+                uri: 'https://thecityresort.com/storage/files/' + imgSource,
               }
             : require('../../assets/images/dummy-image-square.jpg')
         }
@@ -346,7 +346,7 @@ const ComplaintDetail = ({route, navigation}) => {
         source={
           imgSource != null && imgSource != 'null'
             ? {
-                uri: 'https://sb.thecityresort.com/storage/files/' + imgSource,
+                uri: 'https://thecityresort.com/storage/files/' + imgSource,
               }
             : require('../../assets/images/dummy-image-square.jpg')
         }
@@ -375,7 +375,7 @@ const ComplaintDetail = ({route, navigation}) => {
       redirect: 'follow',
     };
 
-    fetch('https://sb.thecityresort.com/api/update-tickets', requestOptions)
+    fetch('https://thecityresort.com/api/update-tickets', requestOptions)
       .then(response => response.text())
       .then(result => {
         navigation.navigate('MainApp');
