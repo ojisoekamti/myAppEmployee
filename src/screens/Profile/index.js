@@ -79,6 +79,18 @@ const Profile = ({navigation}) => {
             <Text style={styles.menuItemText}>Tell Your Friends</Text>
           </View>
         </TouchableRipple>
+        <TouchableRipple onPress={() => {}}>
+          <View style={styles.menuItem}>
+            <Icon name="account-edit-outline" color="#FF6347" size={25} />
+            <Text style={styles.menuItemText}>List Approval</Text>
+          </View>
+        </TouchableRipple>
+        <TouchableRipple onPress={() => navigation.navigate('ListJadwalScreen')}>
+          <View style={styles.menuItem}>
+            <Icon name="account-edit-outline" color="#FF6347" size={25} />
+            <Text style={styles.menuItemText}>List Jadwal</Text>
+          </View>
+        </TouchableRipple>
         <TouchableRipple
           onPress={() => navigation.navigate('EditProfileScreen')}>
           <View style={styles.menuItem}>

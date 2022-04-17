@@ -66,6 +66,7 @@ const ShiftFrom = ({navigation, route}) => {
     const urole = await getAsyncData('urole');
     const uname = await getAsyncData('uname');
     // console.log(uid);
+    console.log(urole);
     if (uid != null) {
       console.log('Route Params', route.params.new);
       var url =
@@ -378,9 +379,9 @@ const ShiftFrom = ({navigation, route}) => {
                 {items.map((item, index) => {
                   return (
                     <Select.Item
-                      key={index}
-                      label={item.lev1}
-                      value={item.lev1}
+                      key={item.id}
+                      label={item.name}
+                      value={item.id}
                     />
                   );
                 })}

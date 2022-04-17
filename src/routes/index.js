@@ -19,6 +19,7 @@ import EditProfileScreen from '../screens/Profile/EditProfileScreen';
 import ShiftFrom from '../screens/Shift/ShiftFrom';
 import ApprovalForm from '../screens/Shift/ApprovalForm';
 import ContactListScreen from '../screens/Chat/ContactListScreen';
+import ListJadwalScreen from '../screens/RequestMenu/ListJadwalScreen';
 //import {setAsyncData} from '../asyncStorage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RequestMenu from '../screens/RequestMenu';
@@ -203,6 +204,11 @@ const Routes = ({token, notifData}) => {
         name="RequestMenu"
         component={RequestMenu}
         options={{title: 'Request Menu'}}
+      />
+      <Stack.Screen
+        name="ListJadwalScreen"
+        component={ListJadwalScreen}
+        options={{title: 'List Jadwal'}}
       />
     </Stack.Navigator>
   );

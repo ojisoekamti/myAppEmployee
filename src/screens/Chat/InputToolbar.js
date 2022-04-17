@@ -29,9 +29,10 @@ const chooseFile = (...props) => {
   console.log(uuid.v4());
   // return;
   let options = {
-    maxWidth: 500,
-    maxHeight: 500,
-    mediaType: 'photo',
+    //maxWidth: 500,
+    //maxHeight: 500,
+    mediaType: 'mediaType',
+    quality: 0.6,
     // title: 'Select Image',
     // customButtons: [
     //     {
@@ -110,9 +111,10 @@ const choosePhoto = (...props) => {
   console.log(uuid.v4());
   // return;
   let options = {
-    maxWidth: 500,
-    maxHeight: 500,
-    mediaType: 'photo',
+    //maxWidth: 500,
+    //maxHeight: 500,
+    mediaType: 'mediaType',
+    quality: 0.1,
     // title: 'Select Image',
     // customButtons: [
     //     {

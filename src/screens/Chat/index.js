@@ -76,68 +76,7 @@ const FirstRoute = () => {
           console.log(result);
           result = JSON.parse(result);
           console.log(result);
-          if (result[0].lev2 > 0 && result[0].lev3 > 0) {
-            data.push(
-              {
-                id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-                fullName: 'PPRS - Dansek',
-                prefix: 'pprs-security',
-                timeStamp: '12:47 PM',
-                // recentText: 'Good Day!',
-                avatarUrl:
-                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
-              },
-              {
-                id: 'bd7acbeb-c1b1-46c2-aed5-3ad53abb28ba',
-                fullName: 'Dansek - Danru ',
-                prefix: 'dansek-danru',
-                timeStamp: '12:47 PM',
-                // recentText: 'Good Day!',
-                avatarUrl:
-                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
-              },
-              {
-                id: 'bd7acbeb-c1b1-46c2-aed5-2ad53abb28ba',
-                fullName: 'Security CRR ',
-                prefix: 'security-crr',
-                timeStamp: '12:47 PM',
-                // recentText: 'Good Day!',
-                avatarUrl:
-                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
-              },
-            );
-          } else if (result[0].lev2 > 0) {
-            data.push(
-              {
-                id: 'bd7acbeb-c1b1-46c2-aed5-3ad53abb28ba',
-                fullName: 'Dansek - Danru ',
-                prefix: 'dansek-danru',
-                timeStamp: '12:47 PM',
-                // recentText: 'Good Day!',
-                avatarUrl:
-                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
-              },
-              {
-                id: 'bd7acbeb-c1b1-46c2-aed5-2ad53abb28ba',
-                fullName: 'Security CRR ',
-                prefix: 'security-crr',
-                timeStamp: '12:47 PM',
-                // recentText: 'Good Day!',
-                avatarUrl:
-                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
-              },
-            );
-          } else {
-            data.push({
-              id: 'bd7acbeb-c1b1-46c2-aed5-2ad53abb28ba',
-              fullName: 'Security CRR ',
-              prefix: 'security-crr',
-              timeStamp: '12:47 PM',
-              // recentText: 'Good Day!',
-              avatarUrl:
-                'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
-            });
-          }
+
           setListData(data);
           console.log(data);
         })
@@ -153,26 +92,18 @@ const FirstRoute = () => {
           console.log('Tset', result.length);
           let nameGroup = 'Group 1';
           for (var i = 0; i < result.length; i++) {
-            if (result[i].role_id == 16) {
-              nameGroup = 'Group 2';
-            } else if (result[i].role_id == 17) {
-              nameGroup = 'Group 3';
-            }
-            if (
-              result[i].role_id == 16 ||
-              result[i].role_id == 17 ||
-              result[i].role_id == 15
-            ) {
-              data.push({
-                id: 'bd7acbeb-c1b1-46c2-aed5-' + result[i].role_id,
-                fullName: nameGroup,
-                prefix: 'security-crr' + result[i].role_id,
-                timeStamp: '12:47 PM',
-                // recentText: 'Good Day!',
-                avatarUrl:
-                  'https://thecityresort.com/storage/settings/September2021/tmeKkn3np2dVp2tTkkgX.png',
-              });
-            }
+            let uri = result[i].photo;
+            let encodedUri = encodeURIComponent(uri);
+            let decodedUri = decodeURIComponent(encodedUri);
+            data.push({
+              id: 'bd7acbeb-c1b1-46c2-aed5-' + result[i].id,
+              fullName: result[i].name,
+              prefix: 'group-chat-' + result[i].id,
+              timeStamp: '12:47 PM',
+              // recentText: 'Good Day!',
+              avatarUrl:
+                'https://thecityresort.com/storage/' + decodedUri,
+            });
           }
           // setListData(data);
           // console.log(data);
